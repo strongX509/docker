@@ -1,14 +1,24 @@
 # strongswan
 
-## Build Docker Image <a name="section1"></a>
+Build and run a [strongSwan][STRONGSWAN]  IKEv2 Daemon with a Versatile IKE Control Interface (VICI).
 
-In the `strongswan` directory the docker image can be built with
+[STRONGSWAN]: https://www.strongswan.org
+
+## Pull Docker Image
+
+```
+docker pull strongx509/strongswan
+```
+
+## Build Docker Image
+
+Alternatively the docker image can be built from scratch in the `strongswan` directory with
 ```console
 $ docker build -t strongx509/strongswan .
 ```
 The build rules are defined in [Dockerfile](Dockerfile).
 
-## Create Docker Containers and Local Networks <a name="section2"></a>
+## Create Docker Containers and Local Networks
 
 
 ```
