@@ -7,7 +7,7 @@ Build and run a [strongSwan][STRONGSWAN]  IKEv2 Daemon with a Versatile IKE Cont
 ## Pull Docker Image
 
 ```
-docker pull strongx509/strongswan
+$ docker pull strongx509/strongswan
 ```
 
 ## Build Docker Image
