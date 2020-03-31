@@ -1,6 +1,6 @@
 FROM ubuntu:18.04
 MAINTAINER Andreas Steffen <andreas.steffen@strongswan.org>
-ENV VERSION="5.8.2"
+ENV VERSION="5.8.4"
 
 RUN \
   # install packages
