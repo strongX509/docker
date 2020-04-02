@@ -96,13 +96,16 @@ client# ./charon &
 00[DMN] conns: loaded connection 'home'
 00[DMN] conns: loaded connection 'psk'
 00[DMN] conns: loaded connection 'eap'
-00[DMN] conns: successfully loaded 3 connections, 0 unloaded
+00[DMN] conns: loaded connection 'eap-tls'
+00[DMN] conns: successfully loaded 4 connections, 0 unloaded
 00[DMN] executing start script 'pools' (swanctl --load-pools)
 no pools found, 0 unloaded
 ```
-The setup defines three VPN configurations `home`, `psk`and `eap` based on *X.509 certificates*,  *pre-shared keys* and *EAP MD5*, respectively.
+The setup defines four VPN configurations `home`, `psk`, `eap` and `eap-tls` based on *X.509 certificates*,  *pre-shared keys*, *EAP MD5* and *EAP TLS*, respectively.
 ```console
 client# swanctl --list-conns
+```
+```console
 home: IKEv2, no reauthentication, rekeying every 14400s, dpd delay 60s
   local:  %any
   remote: 192.168.0.2
@@ -117,6 +120,8 @@ home: IKEv2, no reauthentication, rekeying every 14400s, dpd delay 60s
   host: TUNNEL, rekeying every 3600s, dpd action is hold
     local:  dynamic
     remote: dynamic
+```
+```console
 psk: IKEv2, no reauthentication, rekeying every 14400s, dpd delay 60s
   local:  %any
   remote: 192.168.0.2
@@ -127,6 +132,8 @@ psk: IKEv2, no reauthentication, rekeying every 14400s, dpd delay 60s
   psk: TUNNEL, rekeying every 3600s, dpd action is hold
     local:  dynamic
     remote: 10.1.0.0/16
+```
+```console
 eap: IKEv2, no reauthentication, rekeying every 14400s, dpd delay 60s
   local:  %any
   remote: 192.168.0.2
@@ -135,6 +142,18 @@ eap: IKEv2, no reauthentication, rekeying every 14400s, dpd delay 60s
   remote public key authentication:
     id: server.strongswan.org
   eap: TUNNEL, rekeying every 3600s, dpd action is hold
+    local:  dynamic
+    remote: 10.1.0.0/16 192.168.0.2/32
+```
+```console
+eap-tls: IKEv2, no reauthentication, rekeying every 14400s, dpd delay 60s
+  local:  %any
+  remote: 192.168.0.2
+  local EAP_TLS authentication:
+    eap_id: client.strongswan.org
+  remote public key authentication:
+    id: server.strongswan.org
+  eap-tls: TUNNEL, rekeying every 3600s, dpd action is hold
     local:  dynamic
     remote: 10.1.0.0/16 192.168.0.2/32
 ```

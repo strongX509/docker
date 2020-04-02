@@ -19,9 +19,9 @@ RUN \
     --enable-openssl --enable-pkcs1 --enable-pkcs8 --enable-pkcs12    \
     --enable-pem --enable-x509 --enable-pubkey --enable-constraints   \
     --enable-pki --enable-socket-default --enable-kernel-netlink      \
-    --enable-eap-identity --enable-eap-md5 --enable-eap-tls           \
-    --enable-updown --enable-vici --enable-drbg --enable-swanctl      \
-    --enable-silent-rules  && \
+    --enable-eap-identity --enable-eap-md5 --enable-eap-dynamic       \
+    --enable-eap-tls --enable-updown --enable-vici --enable-drbg      \
+    --enable-swanctl --enable-silent-rules  && \
    make all && make install && \
    cd / && rm -R strongswan-build && \
    ln -s /usr/libexec/ipsec/charon charon && \
