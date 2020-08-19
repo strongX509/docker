@@ -1,12 +1,12 @@
 FROM ubuntu:18.04
 MAINTAINER Andreas Steffen <andreas.steffen@strongswan.org>
-ENV VERSION="5.8.4"
+ENV VERSION="5.9.0"
 
 RUN \
   # install packages
   DEV_PACKAGES="wget make gcc libssl-dev" && \
   apt-get -y update && \
-  apt-get -y install iproute2 iputils-ping $DEV_PACKAGES && \
+  apt-get -y install iproute2 iputils-ping nano $DEV_PACKAGES && \
   \
   # download and build strongSwan IKEv2 daemon
   mkdir /strongswan-build && \
