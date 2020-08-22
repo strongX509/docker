@@ -1,0 +1,12 @@
+version: "3"
+
+services:
+  tpm-server:
+    image: strongx509/tpm
+    container_name: tpm-server
+    cap_add:
+      - NET_ADMIN
+      - SYS_ADMIN
+      - SYS_MODULE
+    stdin_open: true
+    tty: true
