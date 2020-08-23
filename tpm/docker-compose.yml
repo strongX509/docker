@@ -10,3 +10,5 @@ services:
       - SYS_MODULE
     stdin_open: true
     tty: true
+    volumes:
+      - ./strongswan.conf:/etc/strongswan.conf

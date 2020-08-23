@@ -3,6 +3,7 @@ MAINTAINER Andreas Steffen <andreas.steffen@strongswan.org>
 ENV TPM_VERSION="1637"
 ENV TPM_TSS_VERSION="2.3.1"
 ENV TPM_TOOLS_VERSION="3.2.0"
+ENV STRONGSWAN_VERSION="5.9.0"
 RUN \
   # install packages
   DEV_PACKAGES="wget make gcc g++ pkg-config libssl-dev libcurl4-openssl-dev" && \
@@ -37,6 +38,20 @@ RUN \
   ./configure --prefix=/usr && \
   make all && make install && \
   cd / &&  rm -r tpm_tools-build && \
+  \
+  # download and build strongSwan pki tool
+  mkdir /pki-build && \
+  cd /pki-build && \
+  wget https://download.strongswan.org/strongswan-$STRONGSWAN_VERSION.tar.bz2 && \
+  tar xf strongswan-$STRONGSWAN_VERSION.tar.bz2 && \
+  cd strongswan-$STRONGSWAN_VERSION && \
+  ./configure --prefix=/usr --sysconfdir=/etc --disable-defaults      \
+    --enable-nonce --enable-openssl --enable-pkcs1 --enable-pkcs8     \
+    --enable-pkcs12 --enable-pem --enable-x509 --enable-pubkey        \
+    --enable-constraints --enable-pki --enable-tpm --enable-tss-tss2  \
+    --enable-silent-rules  && \
+  make all && make install && \
+  cd / &&  rm -r pki-build && \
   \
   # clean up
   apt-get -y remove $DEV_PACKAGES && \
