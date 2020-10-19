@@ -1,0 +1,49 @@
+version: "3"
+
+services:
+  moon:
+    image: strongx509/pq-strongswan:6.0dr1
+    container_name: moon
+    cap_add:
+      - NET_ADMIN
+      - SYS_ADMIN
+      - SYS_MODULE
+    stdin_open: true
+    tty: true
+    volumes:
+      - ./moon:/etc/swanctl
+      - ./strongswan.conf:/etc/strongswan.conf
+    networks:
+      internet:
+         ipv4_address: 192.168.0.2
+      intranet:
+         ipv4_address: 10.1.0.2
+  carol:
+    image: strongx509/pq-strongswan:6.0dr1
+    container_name: carol
+    depends_on:
+      - moon
+    cap_add:
+      - NET_ADMIN
+      - SYS_ADMIN
+      - SYS_MODULE
+    stdin_open: true
+    tty: true
+    volumes:
+      - ./carol:/etc/swanctl
+      - ./strongswan.conf:/etc/strongswan.conf
+    networks:
+      internet:
+         ipv4_address: 192.168.0.3
+
+networks:
+  internet:
+    ipam:
+      driver: default 
+      config:
+        - subnet: 192.168.0.0/24
+  intranet:
+     ipam:
+        driver: default
+        config:
+          - subnet: 10.1.0.0/16 
