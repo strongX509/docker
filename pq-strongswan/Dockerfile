@@ -1,6 +1,6 @@
 FROM ubuntu:20.04
 MAINTAINER Andreas Steffen <andreas.steffen@strongswan.org>
-ENV VERSION="6.0dr1"
+ENV VERSION="6.0dr2"
 
 RUN \
   # install packages

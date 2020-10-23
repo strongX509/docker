@@ -2,7 +2,7 @@ version: "3"
 
 services:
   moon:
-    image: strongx509/pq-strongswan:6.0dr1
+    image: strongx509/pq-strongswan:6.0dr2
     container_name: moon
     cap_add:
       - NET_ADMIN
@@ -19,7 +19,7 @@ services:
       intranet:
          ipv4_address: 10.1.0.2
   carol:
-    image: strongx509/pq-strongswan:6.0dr1
+    image: strongx509/pq-strongswan:6.0dr2
     container_name: carol
     depends_on:
       - moon
