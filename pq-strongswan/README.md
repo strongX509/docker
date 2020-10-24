@@ -1,24 +1,44 @@
 # pq-strongswan
 
-Build and run a [strongSwan][STRONGSWAN] 6.0dr Post-Quantum IKEv2 Daemon.
+Build and run a [strongSwan][STRONGSWAN] 6.0dr Post-Quantum IKEv2 Daemon in a Docker image. The current prototype implementation is based on the two following IETF Internet Drafts:
+
+* [draft-ietf-ipsecme-ikev2-multiple-ke][IKEV2_MULTIPLE_KE]: Multiple Key Exchanges in IKEv2
+* [draft-ietf-ipsecme-ikev2-intermediate][IKEV2_INTERMEDIATE]: Intermediate Exchange in the IKEv2 Protocol
 
 [STRONGSWAN]: https://www.strongswan.org
+[IKEV2_MULTIPLE_KE]:https://tools.ietf.org/html/draft-ietf-ipsecme-ikev2-multiple-ke
+[IKEV2_INTERMEDIATE]:https://tools.ietf.org/html/draft-ietf-ipsecme-ikev2-intermediate
 
-## Pull Docker Image
+## Table of Contents
+
+ 1. [Docker Setup](#section1)
+ 2. [strongSwan Configuration](#section2)
+ 3. [Start up the IKEv2 Daemons](#section3)
+ 4. [Establish the IKE SA and first Child SA](#section4)
+ 5. [Establish a second CHILD SA](#section5)
+ 6. [Use the IPsec Tunnels](#section6)
+ 7. [Rekeying of first CHILD SA](#section7)
+ 8. [Rekeying of second CHILD SA](#section8)
+ 9. [Rekeying of IKE SA](#section9)
+10. [SA Status after Rekeying](#section10)
+
+## Docker Setup <a name="section1"></a>
+
+### Pull Docker Image
 
 ```
 $ docker pull strongx509/pq-strongswan
 ```
 
-## Build Docker Image
+### Build Docker Image
 
-Alternatively the docker image can be built from scratch in the `strongswan` directory with
+Alternatively the docker image can be built from scratch in the `pq-strongswan` directory with
 ```console
 $ docker build -t strongx509/pq-strongswan .
 ```
 The build rules are defined in [Dockerfile](Dockerfile).
 
-## Create Docker Containers and Local Networks
+### Create Docker Containers and Local Networks
 
 We clone the strongSwan `docker-compose` environment which automatically installs the `strongx509/pq-strongswan` docker image and brings the `moon` and `carol` docker containers up:
 ```console
@@ -38,7 +58,7 @@ The network topology that has been created looks as follows:
 ```
 VPN client `carol` and VPN gateway `moon` are connected with each other via the `192.168.0.0/24` network emulating the `Internet`. Behind `moon` there is an additional `10.1.0.0/16` network acting as an `Intranet`. Within the IPsec tunnel `carol` is going to use the virtual IP address `10.3.0.1`  that will be assigned to the client  by the gateway via the IKEv2 protocol.
 
-## strongSwan Configuration
+## strongSwan Configuration <a name="section2"></a>
 
 strongSwan options can be configured in the `/etc/strongswan.conf` file which in our case contains the startup scripts and a logging directive diverting the debug output to `stderr`. We also define the size of the IP fragments and the maximum IKEv2 packet size which can be quite considerable with some post-quantum Key Exchange Methods.
 ```console
@@ -63,20 +83,20 @@ charon {
 
 | Keyword  | Key Exchange Method | Keyword  | Key Exchange Method | Keyword  | Key Exchange Method |
 | :------- | :------------------ | :------- | :------------------ | :------- | :------------------ |
-| `kyber1` | `KE_KYBER_L1`       | `kyber3` | `KE_KYBER_L3`       | `kyber5` | `KE_KYBER_L5`       |
-| `ntrup1` | `KE_NTRU_HPS_L1`    | `ntrup3` | `KE_NTRU_HPS_L3`    | `ntrup5` | `KE_NTRU_HPS_L5`    |
-|          |                     | `ntrur3` | `KE_NTRU_HRSS_L3`   |          |                     |
-| `saber1` | `KE_SABER_L1`       | `saber3` | `KE_SABER_L3`       | `saber5` | `KE_SABER_L5`       |
+| `kyber1` | `KYBER_L1`          | `kyber3` | `KYBER_L3`       | `kyber5` | `KYBER_L5`       |
+| `ntrup1` | `NTRU_HPS_L1`       | `ntrup3` | `NTRU_HPS_L3`    | `ntrup5` | `NTRU_HPS_L5`    |
+|          |                     | `ntrur3` | `NTRU_HRSS_L3`   |          |                     |
+| `saber1` | `SABER_L1`       | `saber3` | `SABER_L3`       | `saber5` | `SABER_L5`       |
 
 
 ### NIST Alternate KEM Candidates
 
 | Keyword   | Key Exchange Method | Keyword   | Key Exchange Method | Keyword   | Key Exchange Method |
 | :-------- | :------------------ | :-------- | :------------------ | :-------- | :------------------ |
-| `frodoa1` | `KE_FRODO_AES_L1`   | `frodoa3` | `KE_FRODO_AES_L3`   | `frodoa5` | `KE_FRODO_AES_L5`   |
-| `frodos1` | `KE_FRODO_SHAKE_L1` | `frodos3` | `KE_FRODO_SHAKE_L3` | `frodos5` | `KE_FRODO_SHAKE_L5` |
-| `sike1`   | `KE_SIKE_L1`        | `sike3`   | `KE_SIKE_L3`        | `sike5`   | `KE_SIKE_L5`        |
-|           |                     | `sike2`   | `KE_SIKE_L2`        |           |                     |
+| `frodoa1` | `FRODO_AES_L1`   | `frodoa3` | `FRODO_AES_L3`   | `frodoa5` | `FRODO_AES_L5`   |
+| `frodos1` | `FRODO_SHAKE_L1` | `frodos3` | `FRODO_SHAKE_L3` | `frodos5` | `FRODO_SHAKE_L5` |
+| `sike1`   | `SIKE_L1`        | `sike3`   | `SIKE_L3`        | `sike5`   | `SIKE_L5`        |
+|           |                     | `sike2`   | `SIKE_L2`        |           |                     |
 
 The KEM algorithms listed above are implemented by the strongSwan `oqs` plugin which in turn uses the  [liboqs][LIBOQS]  Open Quantum-Safe library. There is also a `frodo` plugin which implements the `FrodoKEM` algorithm with strongSwan crypto primitives. There is currently no support for the `BIKE` and  `HQC` alternate KEM candidates. `Classic McEliece` , although being a NIST round 3 submission KEM candidate, is not an option for IKE due to the huge public key size of more than 100 kB.
 
@@ -163,7 +183,7 @@ pools {
 }
 ```
 
-## Starting up the IKEv2 Daemons
+## Start up the IKEv2 Daemons <a name="section3"></a>
 
 ### On VPN Gateway "moon"
 
@@ -249,7 +269,7 @@ home: IKEv2, no reauthentication, rekeying every 1800s
     remote: dynamic
 ```
 
-## Establish the IKE SA and first Child SA
+## Establish the IKE SA and first Child SA <a name="section4"></a>
 
 Since in the docker container  the `charon` daemon has been started on the command line and put in the background, we suppress the duplicate output of the `swanctl --initiate` command. Normally `charon` is started as a `systemd` service and writes to `syslog`.
 ```console
@@ -280,21 +300,21 @@ The negotiated *hybrid* key exchange will use Dan Bernstein's `X25519` elliptic 
 05[ENC] parsed IKE_INTERMEDIATE response 1 [ KE ]
 
 ```
-The `Kyber` key exchange has been completed and the derived secret has been added to the `SKEYSEED` master secret.
+The `KYBER_L3` key exchange defined as `ADDITIONAL_KEY_EXCHANGE_1`has been completed and the derived secret has been added to the `SKEYSEED` master secret.
 ```console
  the `SKEYSEED` master secret.05[ENC] generating IKE_INTERMEDIATE request 2 [ KE ]
 05[NET] sending packet: from 192.168.0.3[4500] to 192.168.0.2[4500] (1008 bytes)
 15[NET] received packet: from 192.168.0.2[4500] to 192.168.0.3[4500] (1008 bytes)
 15[ENC] parsed IKE_INTERMEDIATE response 2 [ KE ]
 ```
-The `NTRU` key exchange has been completed and the derived secret has been added to the `SKEYSEED` master secret.
+The `NTRU_HPS_L3` key exchange defined `ADDITIONAL_KEY_EXCHANGE_2`has been completed and the derived secret has been added to the `SKEYSEED` master secret.
 ```console
 15[ENC] generating IKE_INTERMEDIATE request 3 [ KE ]
 15[NET] sending packet: from 192.168.0.3[4500] to 192.168.0.2[4500] (1072 bytes)
 07[NET] received packet: from 192.168.0.2[4500] to 192.168.0.3[4500] (1168 bytes)
 07[ENC] parsed IKE_INTERMEDIATE response 3 [ KE ]
 ```
-The `Saber` key exchange has been completed and the derived secret has been added to the `SKEYSEED` master secret.
+The `SABER_L3` key exchange defined as `ADDITIONAL_KEY_EXCHANGE_3`has been completed and the derived secret has been added to the `SKEYSEED` master secret.
 ```console
 07[IKE] sending cert request for "C=CH, O=Cyber, CN=Cyber Root CA"
 07[IKE] authentication of 'carol@strongswan.org' (myself) with ECDSA_WITH_SHA384_DER successful
@@ -318,7 +338,7 @@ The `Saber` key exchange has been completed and the derived secret has been adde
 08[IKE] peer supports MOBIKE
 ```
 
-## Establish a second CHILD SA
+## Establish a second CHILD SA <a name="section5"></a>
 
 ```console
 carol# swanctl --initiate --child host > /dev/null
@@ -362,7 +382,7 @@ The negotiated *hybrid* key exchange will use the `3072 bit`prime Diffie-Hellman
 11[NET] sending packet: from 192.168.0.3[4500] to 192.168.0.2[4500] (1444 bytes)
 11[NET] sending packet: from 192.168.0.3[4500] to 192.168.0.2[4500] (596 bytes)
 ```
-The design of FrodoKEM is quite conservative so that the large public key sent by the initiator via the `IKE_FOLLOWUP_KE` message has to be split into 12 IKEv2 fragments.
+The design of `FrodoKEM` is quite conservative so that the large public key sent by the initiator via the `IKE_FOLLOWUP_KE` message has to be split into 12 IKEv2 fragments.
 ```console
 16[NET] received packet: from 192.168.0.2[4500] to 192.168.0.3[4500] (1444 bytes)
 16[ENC] parsed IKE_FOLLOWUP_KE response 6 [ EF(1/12) ]
@@ -402,20 +422,23 @@ The design of FrodoKEM is quite conservative so that the large public key sent b
 12[ENC] received fragment #12 of 12, reassembled fragmented IKE message (15840 bytes)
 12[ENC] parsed IKE_FOLLOWUP_KE response 6 [ KE N(ADD_KE) ]
 ```
-The encrypted session secret sent by the responder has to be fragmented into 12 parts as well.  The `FrodoKEM` key exchange has been completed and the derived secret has been added to the `SKEYSEED` master secret.
+The encrypted session secret sent by the responder has to be fragmented into 12 parts as well.  The `FRODO_AES_L3` key exchange defined as `ADDITIONAL_KEY_EXCHANGE_1`  has been completed.
 ```console
 12[ENC] generating IKE_FOLLOWUP_KE request 7 [ KE N(ADD_KE) ]
 12[NET] sending packet: from 192.168.0.3[4500] to 192.168.0.2[4500] (544 bytes)
 09[NET] received packet: from 192.168.0.2[4500] to 192.168.0.3[4500] (560 bytes)
 09[ENC] parsed IKE_FOLLOWUP_KE response 7 [ KE ]
 ```
-The `SIKE` public key and encrypted secret are extremely compact and can be exchanged with an unfragmented `IKE_FOLLOWUP_KE` message each. The `SIKE` key exchange has been completed and the derived secret has been added to the `SKEYSEED` master secret.
+The `SIKE` public key and encrypted secret are extremely compact and can be exchanged with an unfragmented `IKE_FOLLOWUP_KE` message each. After the `SIKE` key exchange defined as `ADDITIONAL_KEY_EXCHANGE_2`has been completed the keying material `KEYMAT` for the `CHILD_SA is computed as follows
+```
+KEYMAT = prf+ (SK_d, KE  | Ni | Nr | KE(1) |  ... KE(n))
+```
+where `Sk_d` is the derived secret for the `IKE_SA` and the concatenated secrets from the `MODP_3072` (`KE`), `FRODO_AES_L3` (`KE1`) and `SIKE_L3`(`KE2`) key exchanges are added.
 ```console
 09[IKE] CHILD_SA host{2} established with SPIs c30c7277_i c3d23925_o and TS 10.3.0.1/32 === 192.168.0.2/32
-
 ```
 
-## Use the IPsec Tunnels
+## Use the IPsec Tunnels <a name="section6"></a>
 
 First we ping the network behind gateway `moon`
 ```console
@@ -452,8 +475,9 @@ home: #1, ESTABLISHED, IKEv2, c4fde529c8b6e66b_i* 981bb4427938a72b_r
     remote 192.168.0.2/32
 ```
 
-## Rekeying of first CHILD SA
+## Rekeying of first CHILD SA <a name="section7"></a>
 
+The rekeying of the first 'CHILD_SA' takes place automatically after the `rekey_time` interval of `20` minutes.
 ```console
 12[KNL] creating rekey job for CHILD_SA ESP/0xc98cde86/192.168.0.2
 10[IKE] establishing CHILD_SA net{3} reqid 1
@@ -500,8 +524,9 @@ The new `CHILD_SA` has been established..
 ```
 The old `CHILD_SA` has been deleted.
 
-# Rekeying of second CHILD SA
+## Rekeying of second CHILD SA <a name="section8"></a>
 
+The rekeying of the second  'CHILD_SA' takes place automatically after the `rekey_time` interval of `20` minutes.
 ```console
 09[KNL] creating rekey job for CHILD_SA ESP/0xc30c7277/192.168.0.3
 16[IKE] establishing CHILD_SA host{4} reqid 2
@@ -601,8 +626,9 @@ The new `CHILD_SA` has been  established..
 ```
 The old `CHILD_SA` has been deleted.
 
-## Rekeying of IKE SA
+## Rekeying of IKE SA <a name="section9"></a>
 
+The rekeying of the first 'IKE_SA' takes place automatically after the `rekey_time` interval of `30` minutes.
 ```console
 13[IKE] initiating IKE_SA home[2] to 192.168.0.2
 13[ENC] generating CREATE_CHILD_SA request 17 [ SA No KE ]
@@ -647,7 +673,7 @@ The new `IKE_SA` has been established.
 ```
 The old `IKE_SA` has been deleted.
 
-## SA Status after Rekeying
+## SA Status after Rekeying <a name="section10"></a>
 
 ```console
 carol# swanctl --list-sas
