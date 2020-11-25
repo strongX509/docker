@@ -79,7 +79,7 @@ charon {
 }
 ```
 
-### NIST Round 3 Submission KEM Candidates
+### NIST Round 3 KEM Finalists
 
 | Keyword  | Key Exchange Method | Keyword  | Key Exchange Method | Keyword  | Key Exchange Method |
 | :------- | :------------------ | :------- | :------------------ | :------- | :------------------ |
@@ -98,15 +98,16 @@ charon {
 | `sike1`  | `SIKE_L1`           | `sike3`  | `SIKE_L3`           | `sike5`  | `SIKE_L5`           |
 |          |                     | `sike2`  | `SIKE_L2`           |          |                     |
 
-The KEM algorithms listed above are implemented by the strongSwan `oqs` plugin which in turn uses the  [liboqs][LIBOQS]  Open Quantum-Safe library. There is also a `frodo` plugin which implements the `FrodoKEM` algorithm with strongSwan crypto primitives. There is currently no support for the `BIKE` and  `HQC` alternate KEM candidates. `Classic McEliece` , although being a NIST round 3 submission KEM candidate, is not an option for IKE due to the huge public key size of more than 100 kB.
+The KEM algorithms listed above are implemented by the strongSwan `oqs` plugin which in turn uses the  [liboqs][LIBOQS]  Open Quantum-Safe library. There is also a `frodo` plugin which implements the `FrodoKEM` algorithm with strongSwan crypto primitives. There is currently no support for the `BIKE` and  `HQC` alternate KEM candidates. `Classic McEliece` , although being a NIST round 3 KEM finalist, is not an option for IKE due to the huge public key size of more than 100 kB.
 
-### NIST Round 3 Submission Signature Candidates
+### NIST Round 3 Signature Finalists
 
 | Keyword     | Signature Key Type | Keyword     | Signature Key Type | Keyword     | Signature Key Type |
 | :---------- | :----------------- | :---------- | :----------------- | :---------- | :----------------- |
 | `dilithium2`| `KEY_DILITHIUM_2`  | `dilithium3`| `KEY_DILITHIUM_3`  | `dilithium4`| `KEY_DILITHIUM_4`  |
+| `falcon512`| `KEY_FALCON_512`    |             |                    | `falcon1024`| `KEY_FALCON_1024`  |
 
-As a proof of concept, only the lattice-based `Crystals-Dilithium` family of signature algorithms is currently implemented by the strongSwan `oqs` plugin.
+Currently the lattice-based `Crystals-Dilithium` and `Falcon`  NIST Round 3 signature finalists are currently supported by the strongSwan `oqs` plugin.
 
 [LIBOQS]: https://github.com/open-quantum-safe/liboqs
 
@@ -199,7 +200,7 @@ In an additional console window we open a `bash` shell to start and manage the s
 ```console
 moon$ docker exec -ti moon /bin/bash
 moon# ./charon &
-00[DMN] Starting IKE charon daemon (strongSwan 6.0dr3, Linux 5.4.0-52-generic, x86_64)
+00[DMN] Starting IKE charon daemon (strongSwan 6.0dr4, Linux 5.4.0-52-generic, x86_64)
 00[LIB] loaded plugins: charon random nonce x509 constraints pubkey pkcs1 pkcs8 pkcs12 pem openssl frodo oqs drbg kernel-netlink socket-default vici updown
 00[JOB] spawning 16 worker threads
 00[DMN] executing start script 'creds' (swanctl --load-creds)
@@ -244,14 +245,14 @@ moon# swanctl --list-certs
 List of X.509 End Entity Certificates
   subject:  "C=CH, O=Cyber, CN=moon.strongswan.org"
   issuer:   "C=CH, O=Cyber, CN=Cyber Root CA"
-  validity:  not before Nov 15 19:41:53 2020, ok
-             not after  Nov 15 19:41:53 2024, ok (expires in 1460 days)
-  serial:    3f:0c:35:a4:c1:55:e1:e3
+  validity:  not before Nov 24 18:40:24 2020, ok
+             not after  Nov 24 18:40:24 2024, ok (expires in 1460 days)
+  serial:    45:5b:66:b8:22:5e:8d:a5
   altNames:  moon.strongswan.org
   flags:     
-  authkeyId: 45:e1:3b:6e:b3:cb:ac:ed:f1:92:3e:e6:c4:45:88:8d:cc:a1:ae:e2
+  authkeyId: 23:1d:1f:d3:c6:18:30:8d:9c:88:99:37:0d:98:41:73:b2:99:ec:c5
   subjkeyId: d1:4d:55:b6:19:b0:2b:34:d4:eb:f8:84:d2:b8:aa:56:7e:cb:89:1e
-  pubkey:    Dilithium4 1760 bits, has private key
+  pubkey:    Dilithium4 14080 bits, has private key
   keyid:     71:bb:92:a9:56:00:bf:f6:cb:32:f4:46:75:03:b6:70:fa:27:d9:25
   subjkey:   d1:4d:55:b6:19:b0:2b:34:d4:eb:f8:84:d2:b8:aa:56:7e:cb:89:1e
 ```
@@ -259,14 +260,14 @@ List of X.509 End Entity Certificates
 List of X.509 CA Certificates
   subject:  "C=CH, O=Cyber, CN=Cyber Root CA"
   issuer:   "C=CH, O=Cyber, CN=Cyber Root CA"
-  validity:  not before Nov 15 19:41:53 2020, ok
-             not after  Nov 15 19:41:53 2030, ok (expires in 3651 days)
-  serial:    03:04:6b:cc:c2:e4:8f
+  validity:  not before Nov 24 18:40:24 2020, ok
+             not after  Nov 24 18:40:24 2030, ok (expires in 3651 days)
+  serial:    2e:c2:a2:33:60:b3:b3:5b
   flags:     CA CRLSign self-signed 
-  subjkeyId: 45:e1:3b:6e:b3:cb:ac:ed:f1:92:3e:e6:c4:45:88:8d:cc:a1:ae:e2
-  pubkey:    Dilithium4 1760 bits
-  keyid:     25:bb:42:fa:88:68:a2:d3:af:03:78:fe:b1:8e:bf:ce:c5:ad:c4:41
-  subjkey:   45:e1:3b:6e:b3:cb:ac:ed:f1:92:3e:e6:c4:45:88:8d:cc:a1:ae:e2
+  subjkeyId: 23:1d:1f:d3:c6:18:30:8d:9c:88:99:37:0d:98:41:73:b2:99:ec:c5
+  pubkey:    Falcon1024 14344 bits
+  keyid:     ca:87:0b:6f:05:52:4b:cd:e0:79:a4:1a:5a:33:6f:aa:92:55:eb:47
+  subjkey:   23:1d:1f:d3:c6:18:30:8d:9c:88:99:37:0d:98:41:73:b2:99:ec:c5
 ```
 
 ### On VPN Client "carol"
@@ -275,7 +276,7 @@ In a third console window we open a `bash`shell to start and manage the strongSw
 ```console
 carol$ docker exec -ti carol /bin/bash
 carol# ./charon &
-00[DMN] Starting IKE charon daemon (strongSwan 6.0dr3, Linux 5.4.0-52-generic, x86_64)
+00[DMN] Starting IKE charon daemon (strongSwan 6.0dr4, Linux 5.4.0-52-generic, x86_64)
 00[LIB] loaded plugins: charon random nonce x509 constraints pubkey pkcs1 pkcs8 pkcs12 pem openssl frodo oqs drbg kernel-netlink socket-default vici updown
 00[JOB] spawning 16 worker threads
 00[DMN] executing start script 'creds' (swanctl --load-creds)
@@ -316,14 +317,14 @@ carol# swanctl --list-certs
 List of X.509 End Entity Certificates
   subject:  "C=CH, O=Cyber, CN=carol@strongswan.org"
   issuer:   "C=CH, O=Cyber, CN=Cyber Root CA"
-  validity:  not before Nov 15 19:41:53 2020, ok
-             not after  Nov 15 19:41:53 2024, ok (expires in 1460 days)
-  serial:    7e:23:f6:fa:17:61:84:8f
+  validity:  not before Nov 24 18:40:25 2020, ok
+             not after  Nov 24 18:40:25 2024, ok (expires in 1460 days)
+  serial:    1d:06:04:69:e7:11:43:e1
   altNames:  carol@strongswan.org
   flags:     
-  authkeyId: 45:e1:3b:6e:b3:cb:ac:ed:f1:92:3e:e6:c4:45:88:8d:cc:a1:ae:e2
+  authkeyId: 23:1d:1f:d3:c6:18:30:8d:9c:88:99:37:0d:98:41:73:b2:99:ec:c5
   subjkeyId: b2:a0:41:d5:6f:99:7f:8f:6f:35:eb:b8:fb:12:04:63:f9:f1:20:a7
-  pubkey:    Dilithium4 1760 bits, has private key
+  pubkey:    Dilithium4 14080 bits, has private key
   keyid:     9f:12:ba:e1:a3:8e:a1:4b:70:dd:7b:e1:0f:46:c6:72:bb:d6:5c:03
   subjkey:   b2:a0:41:d5:6f:99:7f:8f:6f:35:eb:b8:fb:12:04:63:f9:f1:20:a7
 ```
@@ -331,14 +332,14 @@ List of X.509 End Entity Certificates
 List of X.509 CA Certificates
   subject:  "C=CH, O=Cyber, CN=Cyber Root CA"
   issuer:   "C=CH, O=Cyber, CN=Cyber Root CA"
-  validity:  not before Nov 15 19:41:53 2020, ok
-             not after  Nov 15 19:41:53 2030, ok (expires in 3651 days)
-  serial:    03:04:6b:cc:c2:e4:8f
+  validity:  not before Nov 24 18:40:24 2020, ok
+             not after  Nov 24 18:40:24 2030, ok (expires in 3651 days)
+  serial:    2e:c2:a2:33:60:b3:b3:5b
   flags:     CA CRLSign self-signed 
-  subjkeyId: 45:e1:3b:6e:b3:cb:ac:ed:f1:92:3e:e6:c4:45:88:8d:cc:a1:ae:e2
-  pubkey:    Dilithium4 1760 bits
-  keyid:     25:bb:42:fa:88:68:a2:d3:af:03:78:fe:b1:8e:bf:ce:c5:ad:c4:41
-  subjkey:   45:e1:3b:6e:b3:cb:ac:ed:f1:92:3e:e6:c4:45:88:8d:cc:a1:ae:e2
+  subjkeyId: 23:1d:1f:d3:c6:18:30:8d:9c:88:99:37:0d:98:41:73:b2:99:ec:c5
+  pubkey:    Falcon1024 14344 bits
+  keyid:     ca:87:0b:6f:05:52:4b:cd:e0:79:a4:1a:5a:33:6f:aa:92:55:eb:47
+  subjkey:   23:1d:1f:d3:c6:18:30:8d:9c:88:99:37:0d:98:41:73:b2:99:ec:c5
 ```
 
 ## Establish the IKE SA and first Child SA <a name="section4"></a>
@@ -392,61 +393,58 @@ The `Saber` key exchange has been completed and the derived secret has been adde
 16[IKE] sending end entity cert "C=CH, O=Cyber, CN=carol@strongswan.org"
 16[IKE] establishing CHILD_SA net{1}
 16[ENC] generating IKE_AUTH request 4 [ IDi CERT N(INIT_CONTACT) CERTREQ IDr AUTH CPRQ(ADDR) SA TSi TSr N(MOBIKE_SUP) N(NO_ADD_ADDR) N(MULT_AUTH) N(EAP_ONLY) N(MSG_ID_SYN_SUP) ]
-16[ENC] splitting IKE message (9120 bytes) into 7 fragments
-16[ENC] generating IKE_AUTH request 4 [ EF(1/7) ]
-16[ENC] generating IKE_AUTH request 4 [ EF(2/7) ]
-16[ENC] generating IKE_AUTH request 4 [ EF(3/7) ]
-16[ENC] generating IKE_AUTH request 4 [ EF(4/7) ]
-16[ENC] generating IKE_AUTH request 4 [ EF(5/7) ]
-16[ENC] generating IKE_AUTH request 4 [ EF(6/7) ]
-16[ENC] generating IKE_AUTH request 4 [ EF(7/7) ]
+16[ENC] splitting IKE message (7024 bytes) into 6 fragments
+16[ENC] generating IKE_AUTH request 4 [ EF(1/6) ]
+16[ENC] generating IKE_AUTH request 4 [ EF(2/6) ]
+16[ENC] generating IKE_AUTH request 4 [ EF(3/6) ]
+16[ENC] generating IKE_AUTH request 4 [ EF(4/6) ]
+16[ENC] generating IKE_AUTH request 4 [ EF(5/6) ]
+16[ENC] generating IKE_AUTH request 4 [ EF(6/6) ]
 16[NET] sending packet: from 192.168.0.3[4500] to 192.168.0.2[4500] (1444 bytes)
 16[NET] sending packet: from 192.168.0.3[4500] to 192.168.0.2[4500] (1444 bytes)
 16[NET] sending packet: from 192.168.0.3[4500] to 192.168.0.2[4500] (1444 bytes)
 16[NET] sending packet: from 192.168.0.3[4500] to 192.168.0.2[4500] (1444 bytes)
 16[NET] sending packet: from 192.168.0.3[4500] to 192.168.0.2[4500] (1444 bytes)
-16[NET] sending packet: from 192.168.0.3[4500] to 192.168.0.2[4500] (1444 bytes)
-16[NET] sending packet: from 192.168.0.3[4500] to 192.168.0.2[4500] (884 bytes)
+16[NET] sending packet: from 192.168.0.3[4500] to 192.168.0.2[4500] (148 bytes)
 ```
-The `IKE_AUTH` request containing a post-quantum `Dilithium4`  X.509 certificate and a corresponding NIST security level 3 digital signature gets so large that it has to be split into 7 IKEv2 fragments.
+The `IKE_AUTH` request containing a post-quantum `Dilithium4`  X.509  client certificate and a corresponding NIST security level 3 digital signature gets so large that it has to be split into 6 IKEv2 fragments.
 ```console
-12[NET] received packet: from 192.168.0.2[4500] to 192.168.0.3[4500] (1444 bytes)
-12[ENC] parsed IKE_AUTH response 4 [ EF(1/7) ]
-12[ENC] received fragment #1 of 7, waiting for complete IKE message
-08[NET] received packet: from 192.168.0.2[4500] to 192.168.0.3[4500] (1444 bytes)
-08[ENC] parsed IKE_AUTH response 4 [ EF(2/7) ]
-08[ENC] received fragment #2 of 7, waiting for complete IKE message
+09[NET] received packet: from 192.168.0.2[4500] to 192.168.0.3[4500] (1444 bytes)
+09[ENC] parsed IKE_AUTH response 4 [ EF(1/5) ]
+09[ENC] received fragment #1 of 5, waiting for complete IKE message
+13[NET] received packet: from 192.168.0.2[4500] to 192.168.0.3[4500] (1444 bytes)
+13[ENC] parsed IKE_AUTH response 4 [ EF(2/5) ]
+13[ENC] received fragment #2 of 5, waiting for complete IKE message
+13[NET] received packet: from 192.168.0.2[4500] to 192.168.0.3[4500] (1444 bytes)
+13[ENC] parsed IKE_AUTH response 4 [ EF(5/5) ]
+13[ENC] received fragment #5 of 5, waiting for complete IKE message
 14[NET] received packet: from 192.168.0.2[4500] to 192.168.0.3[4500] (1444 bytes)
-14[ENC] parsed IKE_AUTH response 4 [ EF(3/7) ]
-14[ENC] received fragment #3 of 7, waiting for complete IKE message
-08[NET] received packet: from 192.168.0.2[4500] to 192.168.0.3[4500] (1444 bytes)
-08[ENC] parsed IKE_AUTH response 4 [ EF(4/7) ]
-08[ENC] received fragment #4 of 7, waiting for complete IKE message
-07[NET] received packet: from 192.168.0.2[4500] to 192.168.0.3[4500] (1444 bytes)
-07[ENC] parsed IKE_AUTH response 4 [ EF(5/7) ]
-07[ENC] received fragment #5 of 7, waiting for complete IKE message
-05[NET] received packet: from 192.168.0.2[4500] to 192.168.0.3[4500] (1444 bytes)
-05[ENC] parsed IKE_AUTH response 4 [ EF(6/7) ]
-05[ENC] received fragment #6 of 7, waiting for complete IKE message
-09[NET] received packet: from 192.168.0.2[4500] to 192.168.0.3[4500] (804 bytes)
-09[ENC] parsed IKE_AUTH response 4 [ EF(7/7) ]
-09[ENC] received fragment #7 of 7, reassembled fragmented IKE message (9040 bytes)
-09[ENC] parsed IKE_AUTH response 4 [ IDr CERT AUTH CPRP(ADDR) SA TSi TSr N(MOBIKE_SUP) N(ADD_4_ADDR) ]
-09[IKE] received end entity cert "C=CH, O=Cyber, CN=moon.strongswan.org"
-09[CFG]   using certificate "C=CH, O=Cyber, CN=moon.strongswan.org"
-09[CFG]   using trusted ca certificate "C=CH, O=Cyber, CN=Cyber Root CA"
-09[CFG]   reached self-signed root ca with a path length of 0
-09[IKE] authentication of 'moon.strongswan.org' with DILITHIUM_4 successful
+14[ENC] parsed IKE_AUTH response 4 [ EF(4/5) ]
+14[ENC] received fragment #4 of 5, waiting for complete IKE message
+11[NET] received packet: from 192.168.0.2[4500] to 192.168.0.3[4500] (1444 bytes)
+11[ENC] parsed IKE_AUTH response 4 [ EF(3/5) ]
+11[ENC] received fragment #3 of 5, reassembled fragmented IKE message (6944 bytes)
+11[ENC] parsed IKE_AUTH response 4 [ IDr CERT AUTH CPRP(ADDR) SA TSi TSr N(MOBIKE_SUP) N(ADD_4_ADDR) ]
+11[IKE] received end entity cert "C=CH, O=Cyber, CN=moon.strongswan.org"
+11[CFG]   using certificate "C=CH, O=Cyber, CN=moon.strongswan.org"
+11[CFG]   using trusted ca certificate "C=CH, O=Cyber, CN=Cyber Root CA"
+11[CFG]   reached self-signed root ca with a path length of 0
+11[IKE] authentication of 'moon.strongswan.org' with DILITHIUM_4 successful
+11[IKE] IKE_SA home[1] established between 192.168.0.3[carol@strongswan.org]...192.168.0.2[moon.strongswan.org]
+11[IKE] scheduling rekeying in 1745s
+11[IKE] maximum IKE_SA lifetime 1925s
+11[IKE] installing new virtual IP 10.3.0.1
+11[CFG] selected proposal: ESP:AES_CBC_256/HMAC_SHA2_256_128/NO_EXT_SEQ
 ```
-IKEv2 fragmentation has also to be applied to the `IKE_AUTH` response containing a post-quantum `Dilithium4` X.509 certificate and signature as well.
+IKEv2 fragmentation has also to be applied to the `IKE_AUTH` response containing a post-quantum `Dilithium4` X.509  gateway certificate and a corresponding NIST security level 3 digital signature as well. Both the client and gateway certificates are signed by a NIST security level 5 `Falcon1024` CA.
 ```console
-09[IKE] IKE_SA home[1] established between 192.168.0.3[carol@strongswan.org]...192.168.0.2[moon.strongswan.org]
-09[IKE] scheduling rekeying in 1634s
-09[IKE] maximum IKE_SA lifetime 1814s
-09[IKE] installing new virtual IP 10.3.0.1
-09[CFG] selected proposal: ESP:AES_CBC_256/HMAC_SHA2_256_128/NO_EXT_SEQ
-09[IKE] CHILD_SA net{1} established with SPIs c5561317_i cb267ff1_o and TS 10.3.0.1/32 === 10.1.0.0/24
-09[IKE] peer supports MOBIKE
+11[IKE] IKE_SA home[1] established between 192.168.0.3[carol@strongswan.org]...192.168.0.2[moon.strongswan.org]
+11[IKE] scheduling rekeying in 1745s
+11[IKE] maximum IKE_SA lifetime 1925s
+11[IKE] installing new virtual IP 10.3.0.1
+11[CFG] selected proposal: ESP:AES_CBC_256/HMAC_SHA2_256_128/NO_EXT_SEQ
+11[IKE] CHILD_SA net{1} established with SPIs c5561317_i cb267ff1_o and TS 10.3.0.1/32 === 10.1.0.0/24
+11[IKE] peer supports MOBIKE
 ```
 
 ## Establish a second CHILD SA <a name="section5"></a>

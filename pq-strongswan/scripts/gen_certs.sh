@@ -1,4 +1,4 @@
-pki --gen --type dilithium4 --outform pem > caKey.pem
+pki --gen --type falcon1024 --outform pem > caKey.pem
 
 pki --self --type priv --in caKey.pem --ca --lifetime 3652 \
     --dn "C=CH, O=Cyber, CN=Cyber Root CA"                  \
