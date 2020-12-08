@@ -201,7 +201,7 @@ In an additional console window we open a `bash` shell to start and manage the s
 ```console
 moon$ docker exec -ti moon /bin/bash
 moon# ./charon &
-00[DMN] Starting IKE charon daemon (strongSwan 6.0dr4, Linux 5.4.0-52-generic, x86_64)
+00[DMN] Starting IKE charon daemon (strongSwan 6.0dr5, Linux 5.4.0-56-generic, x86_64)
 00[LIB] loaded plugins: charon random nonce x509 constraints pubkey pkcs1 pkcs8 pkcs12 pem openssl frodo oqs drbg kernel-netlink socket-default vici updown
 00[JOB] spawning 16 worker threads
 00[DMN] executing start script 'creds' (swanctl --load-creds)
@@ -277,7 +277,7 @@ In a third console window we open a `bash`shell to start and manage the strongSw
 ```console
 carol$ docker exec -ti carol /bin/bash
 carol# ./charon &
-00[DMN] Starting IKE charon daemon (strongSwan 6.0dr4, Linux 5.4.0-52-generic, x86_64)
+00[DMN] Starting IKE charon daemon (strongSwan 6.0dr5, Linux 5.4.0-56-generic, x86_64)
 00[LIB] loaded plugins: charon random nonce x509 constraints pubkey pkcs1 pkcs8 pkcs12 pem openssl frodo oqs drbg kernel-netlink socket-default vici updown
 00[JOB] spawning 16 worker threads
 00[DMN] executing start script 'creds' (swanctl --load-creds)
