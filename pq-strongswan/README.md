@@ -95,10 +95,11 @@ charon {
 | :------- | :------------------ | :------- | :------------------ | :--------| :------------------ |
 | `frodoa1`| `FRODO_AES_L1`      | `frodoa3`| `FRODO_AES_L3`      | `frodoa5`| `FRODO_AES_L5`      |
 | `frodos1`| `FRODO_SHAKE_L1`    | `frodos3`| `FRODO_SHAKE_L3`    | `frodos5`| `FRODO_SHAKE_L5`    |
+| `hqc1`   | `HQC_L1`            | `hqc3`   | `HQC_L3`            | `hqc5`   | `HQC_L5`            |
 | `sike1`  | `SIKE_L1`           | `sike3`  | `SIKE_L3`           | `sike5`  | `SIKE_L5`           |
 |          |                     | `sike2`  | `SIKE_L2`           |          |                     |
 
-The KEM algorithms listed above are implemented by the strongSwan `oqs` plugin which in turn uses the  [liboqs][LIBOQS]  Open Quantum-Safe library. There is also a `frodo` plugin which implements the `FrodoKEM` algorithm with strongSwan crypto primitives. There is currently no support for the `BIKE` and  `HQC` alternate KEM candidates. `Classic McEliece` , although being a NIST round 3 KEM finalist, is not an option for IKE due to the huge public key size of more than 100 kB.
+The KEM algorithms listed above are implemented by the strongSwan `oqs` plugin which in turn uses the  [liboqs][LIBOQS]  Open Quantum-Safe library. There is also a `frodo` plugin which implements the `FrodoKEM` algorithm with strongSwan crypto primitives. There is currently no support for the `BIKE` alternate KEM candidate. `Classic McEliece` , although being a NIST round 3 KEM finalist, is not an option for IKE due to the huge public key size of more than 100 kB.
 
 ### NIST Round 3 Signature Finalists
 
@@ -340,6 +341,59 @@ List of X.509 CA Certificates
   pubkey:    Falcon1024 14344 bits
   keyid:     ca:87:0b:6f:05:52:4b:cd:e0:79:a4:1a:5a:33:6f:aa:92:55:eb:47
   subjkey:   23:1d:1f:d3:c6:18:30:8d:9c:88:99:37:0d:98:41:73:b2:99:ec:c5
+```
+We can also list all supported legacy as well as post-quantum key exchange algorithms
+```console
+carol# swanctl --list-algs
+```
+```console
+ke:
+  ECP_256[openssl]
+  ECP_384[openssl]
+  ECP_521[openssl]
+  ECP_224[openssl]
+  ECP_192[openssl]
+  ECP_256_BP[openssl]
+  ECP_384_BP[openssl]
+  ECP_512_BP[openssl]
+  ECP_224_BP[openssl]
+  MODP_3072[openssl]
+  MODP_4096[openssl]
+  MODP_6144[openssl]
+  MODP_8192[openssl]
+  MODP_2048[openssl]
+  MODP_2048_224[openssl]
+  MODP_2048_256[openssl]
+  MODP_1536[openssl]
+  MODP_1024[openssl]
+  MODP_1024_160[openssl]
+  MODP_768[openssl]
+  MODP_CUSTOM[openssl]
+  CURVE_25519[openssl]
+  CURVE_448[openssl]
+  FRODO_SHAKE_L1[frodo]
+  FRODO_SHAKE_L3[frodo]
+  FRODO_SHAKE_L5[frodo]
+  FRODO_AES_L1[frodo]
+  FRODO_AES_L3[frodo]
+  FRODO_AES_L5[frodo]
+  KYBER_L1[oqs]
+  KYBER_L3[oqs]
+  KYBER_L5[oqs]
+  NTRU_HPS_L1[oqs]
+  NTRU_HPS_L3[oqs]
+  NTRU_HPS_L5[oqs]
+  NTRU_HRSS_L3[oqs]
+  SABER_L1[oqs]
+  SABER_L3[oqs]
+  SABER_L5[oqs]
+  HQC_L1[oqs]
+  HQC_L3[oqs]
+  HQC_L5[oqs]
+  SIKE_L1[oqs]
+  SIKE_L2[oqs]
+  SIKE_L3[oqs]
+  SIKE_L5[oqs]
 ```
 
 ## Establish the IKE SA and first Child SA <a name="section4"></a>

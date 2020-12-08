@@ -1,6 +1,6 @@
 FROM ubuntu:20.04
 MAINTAINER Andreas Steffen <andreas.steffen@strongswan.org>
-ENV VERSION="6.0dr4"
+ENV VERSION="6.0dr5"
 
 RUN \
   # install packages
@@ -11,9 +11,9 @@ RUN \
   # download and build liboqs
   mkdir /liboqs && \
   cd /liboqs && \
-  wget https://github.com/open-quantum-safe/liboqs/archive/master.zip && \
-  unzip master.zip && \
-  cd liboqs-master && \
+  wget https://github.com/open-quantum-safe/liboqs/archive/main.zip && \
+  unzip main.zip && \
+  cd liboqs-main && \
   mkdir build && cd build && \
   cmake -GNinja -DOQS_USE_OPENSSL=ON -DBUILD_SHARED_LIBS=ON -DCMAKE_INSTALL_PREFIX=/usr .. && \
   ninja && ninja install && \
