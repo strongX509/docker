@@ -1,14 +1,17 @@
-FROM ubuntu:18.04
+FROM ubuntu:20.04
 MAINTAINER Andreas Steffen <andreas.steffen@strongswan.org>
 ENV TPM_VERSION="1637"
-ENV TPM_TSS_VERSION="2.3.1"
-ENV TPM_TOOLS_VERSION="3.2.0"
-ENV STRONGSWAN_VERSION="5.9.0"
+ENV TPM_TSS_VERSION="3.0.3"
+ENV TPM_TOOLS_VERSION="5.0"
+ENV STRONGSWAN_VERSION="5.9.2"
+ENV TZ=Europe/Zurich
 RUN \
+  # set timezone
+  ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone && \
   # install packages
-  DEV_PACKAGES="wget make gcc g++ pkg-config libssl-dev libcurl4-openssl-dev" && \
+  DEV_PACKAGES="wget make gcc g++ pkg-config libssl-dev libcurl4-openssl-dev libjson-c-dev uuid-dev" && \
   apt-get -y update && \
-  apt-get -y install nano $DEV_PACKAGES && \
+  apt-get -y install nano libcurl4 $DEV_PACKAGES && \
   \
   # download and build IBM TPM 2.0 simulator 
   mkdir /tpm-build && \
@@ -25,7 +28,8 @@ RUN \
   wget https://github.com/tpm2-software/tpm2-tss/releases/download/$TPM_TSS_VERSION/tpm2-tss-$TPM_TSS_VERSION.tar.gz && \
   tar xf tpm2-tss-$TPM_TSS_VERSION.tar.gz && \
   cd tpm2-tss-$TPM_TSS_VERSION && \
-  ./configure --prefix=/usr --disable-tcti-device --disable-esapi --disable-doxygen-doc && \
+  ./configure --prefix=/usr --with-crypto=ossl --with-tctidefaultmodule=libtss2-tcti-mssim.so \
+              --disable-tcti-device --disable-fapi --disable-doxygen-doc && \
   make all && make install && \
   cd / &&  rm -r tpm_tss-build && \
   \

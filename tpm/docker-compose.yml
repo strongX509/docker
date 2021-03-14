@@ -2,7 +2,7 @@ version: "3"
 
 services:
   tpm-server:
-    image: strongx509/tpm
+    image: strongx509/tpm:5.9.2
     container_name: tpm-server
     cap_add:
       - NET_ADMIN
