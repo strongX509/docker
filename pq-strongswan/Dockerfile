@@ -1,7 +1,7 @@
 FROM ubuntu:20.04
 MAINTAINER Andreas Steffen <andreas.steffen@strongswan.org>
-ENV VERSION="6.0dr6"
-ENV LIBOQS_VERSION="0.5.0"
+ENV VERSION="6.0dr7"
+ENV LIBOQS_VERSION="0.6.0"
 
 RUN \
   # install packages
@@ -16,7 +16,8 @@ RUN \
   unzip $LIBOQS_VERSION.zip && \
   cd liboqs-$LIBOQS_VERSION && \
   mkdir build && cd build && \
-  cmake -GNinja -DOQS_USE_OPENSSL=ON -DBUILD_SHARED_LIBS=ON -DCMAKE_INSTALL_PREFIX=/usr .. && \
+  cmake -GNinja -DOQS_USE_OPENSSL=ON -DBUILD_SHARED_LIBS=ON -DCMAKE_INSTALL_PREFIX=/usr \
+                -DCMAKE_BUILD_TYPE=Release -DOQS_BUILD_ONLY_LIB=ON .. && \
   ninja && ninja install && \
   cd / && rm -R /liboqs && \
   # download and build strongSwan IKEv2 daemon
