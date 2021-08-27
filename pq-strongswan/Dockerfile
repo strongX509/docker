@@ -1,7 +1,7 @@
 FROM ubuntu:20.04
 MAINTAINER Andreas Steffen <andreas.steffen@strongswan.org>
-ENV VERSION="6.0dr8"
-ENV LIBOQS_VERSION="0.6.0"
+ENV VERSION="6.0dr9"
+ENV LIBOQS_VERSION="0.7.0"
 
 RUN \
   # install packages
@@ -32,7 +32,8 @@ RUN \
     --enable-pem --enable-x509 --enable-pubkey --enable-constraints   \
     --enable-pki --enable-socket-default --enable-kernel-netlink      \
     --enable-frodo --enable-oqs --enable-updown --enable-vici         \
-    --enable-drbg --enable-swanctl --enable-silent-rules  && \
+    --enable-drbg --enable-swanctl --enable-resolve                   \
+    --enable-silent-rules  && \
    make all && make install && \
    cd / && rm -R strongswan-build && \
    ln -s /usr/libexec/ipsec/charon charon && \

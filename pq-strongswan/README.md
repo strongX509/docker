@@ -94,6 +94,7 @@ charon {
 
 | Keyword  | Key Exchange Method | Keyword  | Key Exchange Method | Keyword  | Key Exchange Method |
 | :------- | :------------------ | :------- | :------------------ | :--------| :------------------ |
+| `bike1`  | `BIKE_L1`           | `bike3`  | `BIKE_L3`           |          |                     |
 | `frodoa1`| `FRODO_AES_L1`      | `frodoa3`| `FRODO_AES_L3`      | `frodoa5`| `FRODO_AES_L5`      |
 | `frodos1`| `FRODO_SHAKE_L1`    | `frodos3`| `FRODO_SHAKE_L3`    | `frodos5`| `FRODO_SHAKE_L5`    |
 | `hqc1`   | `HQC_L1`            | `hqc3`   | `HQC_L3`            | `hqc5`   | `HQC_L5`            |
@@ -207,8 +208,8 @@ In an additional console window we open a `bash` shell to start and manage the s
 ```console
 moon$ docker exec -ti moon /bin/bash
 moon# ./charon &
-00[DMN] Starting IKE charon daemon (strongSwan 6.0dr6, Linux 5.8.0-45-generic, x86_64)
-00[LIB] loaded plugins: charon random nonce x509 constraints pubkey pkcs1 pkcs8 pkcs12 pem openssl frodo oqs drbg kernel-netlink socket-default vici updown
+00[DMN] Starting IKE charon daemon (strongSwan 6.0dr9, Linux 5.11.0-27-generic, x86_64)
+00[LIB] loaded plugins: charon random nonce x509 constraints pubkey pkcs1 pkcs8 pkcs12 pem openssl frodo oqs drbg kernel-netlink resolve socket-default vici updown
 00[JOB] spawning 16 worker threads
 00[DMN] executing start script 'creds' (swanctl --load-creds)
 15[CFG] loaded certificate 'C=CH, O=Cyber, CN=moon.strongswan.org'
@@ -283,8 +284,8 @@ In a third console window we open a `bash`shell to start and manage the strongSw
 ```console
 carol$ docker exec -ti carol /bin/bash
 carol# ./charon &
-00[DMN] Starting IKE charon daemon (strongSwan 6.0dr6, Linux 5.8.0-45-generic, x86_64)
-00[LIB] loaded plugins: charon random nonce x509 constraints pubkey pkcs1 pkcs8 pkcs12 pem openssl frodo oqs drbg kernel-netlink socket-default vici updown
+00[DMN] Starting IKE charon daemon (strongSwan 6.0dr9, Linux 5.11.0-27-generic, x86_64)
+00[LIB] loaded plugins: charon random nonce x509 constraints pubkey pkcs1 pkcs8 pkcs12 pem openssl frodo oqs drbg kernel-netlink resolve socket-default vici updown
 00[JOB] spawning 16 worker threads
 00[DMN] executing start script 'creds' (swanctl --load-creds)
 01[CFG] loaded certificate 'C=CH, O=Cyber, CN=carol@strongswan.org'
@@ -393,6 +394,8 @@ ke:
   SABER_L1[oqs]
   SABER_L3[oqs]
   SABER_L5[oqs]
+  BIKE_L1[oqs]
+  BIKE_L3[oqs]
   HQC_L1[oqs]
   HQC_L3[oqs]
   HQC_L5[oqs]
