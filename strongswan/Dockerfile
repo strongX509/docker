@@ -1,6 +1,6 @@
 FROM ubuntu:20.04
 MAINTAINER Andreas Steffen <andreas.steffen@strongswan.org>
-ENV VERSION="5.9.3"
+ENV VERSION="5.9.4"
 
 RUN \
   # install packages
@@ -21,7 +21,7 @@ RUN \
     --enable-pki --enable-socket-default --enable-kernel-netlink      \
     --enable-eap-identity --enable-eap-md5 --enable-eap-dynamic       \
     --enable-eap-tls --enable-updown --enable-vici --enable-drbg      \
-    --enable-swanctl --enable-silent-rules  && \
+    --enable-swanctl --enable-resolve --enable-silent-rules  && \
    make all && make install && \
    cd / && rm -R strongswan-build && \
    ln -s /usr/libexec/ipsec/charon charon && \
