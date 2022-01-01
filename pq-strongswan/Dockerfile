@@ -1,6 +1,6 @@
 FROM ubuntu:20.04
 MAINTAINER Andreas Steffen <andreas.steffen@strongswan.org>
-ENV VERSION="6.0dr12"
+ENV VERSION="6.0dr13"
 ENV LIBOQS_VERSION="0.7.1"
 
 RUN \
