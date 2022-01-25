@@ -1,6 +1,6 @@
 FROM ubuntu:20.04
 MAINTAINER Andreas Steffen <andreas.steffen@strongswan.org>
-ENV VERSION="5.9.5"
+ENV VERSION="5.9.5" MD5SUM="53005324e3cba8592f1fb958b1c2d0e5"
 
 RUN \
   # install packages
@@ -12,6 +12,7 @@ RUN \
   mkdir /strongswan-build && \
   cd /strongswan-build && \
   wget https://download.strongswan.org/strongswan-$VERSION.tar.bz2 && \
+  echo "${MD5SUM} strongswan-${VERSION}.tar.bz2" | md5sum --check --strict && \
   tar xfj strongswan-$VERSION.tar.bz2 && \
   cd strongswan-$VERSION && \
   ./configure --prefix=/usr --sysconfdir=/etc --disable-defaults      \
