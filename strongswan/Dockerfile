@@ -1,6 +1,6 @@
 FROM ubuntu:20.04
 MAINTAINER Andreas Steffen <andreas.steffen@strongswan.org>
-ENV VERSION="5.9.4"
+ENV VERSION="5.9.5"
 
 RUN \
   # install packages
