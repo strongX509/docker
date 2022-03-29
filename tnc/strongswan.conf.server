@@ -1,0 +1,48 @@
+# strongSwan configuration file
+
+charon {
+   start-scripts {
+      creds = swanctl --load-creds
+      conns = swanctl --load-conns
+      pools = swanctl --load-pools
+   }
+   filelog {
+      stderr {
+         default = 1
+         tnc = 2
+         imv = 2
+      }
+   }
+   fragment_size = 1500
+
+   plugins {
+     eap-ttls {
+         max_message_count = 0
+         # enable for certificate-based client authentication
+         request_peer_auth = yes
+         phase2_piggyback = yes
+         phase2_method = md5
+         phase2_tnc = yes
+      }
+      eap-tnc {
+         max_message_count = 0
+      }
+      tnccs-20 {
+         max_batch_size   = 32754
+         max_message_size = 32722
+      }
+   }
+}
+
+libimcv {
+   database = sqlite:///etc/pts/config.db
+   policy_script = /usr/libexec/ipsec/imv_policy_manager
+}
+
+libtls {
+  suites = TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384,TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+}
+
+attest {
+   database = sqlite:///etc/pts/config.db
+}

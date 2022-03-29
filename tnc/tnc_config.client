@@ -1,0 +1,5 @@
+#IMC-Configuration
+
+IMC "OS"			/usr/lib/ipsec/imcvs/imc-os.so
+IMC "Scanner"		/usr/lib/ipsec/imcvs/imc-scanner.so
+# IMC "SWIMA"		/usr/lib/ipsec/imcvs/imc-swima.so

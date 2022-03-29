@@ -1,0 +1,47 @@
+# strongSwan configuration file
+
+charon {
+   start-scripts {
+      creds = swanctl --load-creds
+      conns = swanctl --load-conns
+   }
+   filelog {
+      stderr {
+         default = 1
+         tnc = 2
+         imc = 2
+      }
+   }
+   fragment_size = 1500
+
+   plugins {
+     eap-ttls {
+         max_message_count = 0
+      }
+      eap-tnc {
+         max_message_count = 0
+      }
+      tnccs-20 {
+         max_batch_size   = 32754
+         max_message_size = 32722
+      }
+   }
+}
+
+libimcv {
+   plugins {
+      imc-os {
+         # no unique /var/lib/dbus/machine-id on client, set manually
+         device_id = a488651e36664792b306cf8be72dd630
+      }
+   }
+}
+
+libtls {
+   suites = TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384,TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+}
+
+sw-collector {
+   database = sqlite:///etc/pts/collector.db
+   history = /var/log/apt/history.log
+}
