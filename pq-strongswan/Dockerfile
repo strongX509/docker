@@ -1,6 +1,6 @@
 FROM ubuntu:20.04
 MAINTAINER Andreas Steffen <andreas.steffen@strongswan.org>
-ENV VERSION="6.0dr14"
+ENV VERSION="6.0dr15"
 ENV LIBOQS_VERSION="0.7.1"
 
 RUN \
@@ -28,12 +28,11 @@ RUN \
   cd strongswan-$VERSION && \
   ./configure --prefix=/usr --sysconfdir=/etc --disable-defaults      \
     --enable-charon --enable-ikev2 --enable-nonce --enable-random     \
-    --enable-openssl --enable-pkcs1 --enable-pkcs8 --enable-pkcs12    \
-    --enable-pem --enable-x509 --enable-pubkey --enable-constraints   \
-    --enable-pki --enable-socket-default --enable-kernel-netlink      \
+    --enable-openssl --enable-pem --enable-x509 --enable-pubkey       \
+    --enable-constraints --enable-pki --enable-socket-default         \
+    --enable-kernel-netlink --enable-swanctl --enable-resolve         \
     --enable-frodo --enable-oqs --enable-updown --enable-vici         \
-    --enable-drbg --enable-swanctl --enable-resolve                   \
-    --enable-silent-rules  && \
+    --enable-pkcs8 --enable-silent-rules  && \
    make all && make install && \
    cd / && rm -R strongswan-build && \
    ln -s /usr/libexec/ipsec/charon charon && \
