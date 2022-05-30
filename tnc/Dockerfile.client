@@ -1,6 +1,6 @@
 FROM ubuntu:20.04
 MAINTAINER Andreas Steffen <andreas.steffen@strongswan.org>
-ENV VERSION="5.9.5"
+ENV VERSION="5.9.7dr1"
 ENV TZ="Europe/Zurich"
 ENV TMPL="/usr/share/strongswan/templates/database/sw-collector"
 
@@ -8,9 +8,11 @@ RUN \
   # set timezone
   ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone && \
   # install packages
-  DEV_PACKAGES="wget make gcc libssl-dev libsqlite3-dev pkg-config libjson-c-dev" && \
+  DEV_PKGS="wget make gcc libssl-dev libsqlite3-dev pkg-config libjson-c-dev" && \
+  DEV_PKGS="$DEV_PKGS libcurl4-openssl-dev" && \
   apt-get -y update && \
-  apt-get -y install iproute2 iputils-ping nano sqlite3 libjson-c4 net-tools $DEV_PACKAGES && \
+  apt-get -y install iproute2 iputils-ping nano sqlite3 libjson-c4 net-tools \
+    python3 python3-pip libcurl4 $DEV_PKGS && \
   \
   # download and build strongSwan IKEv2 daemon
   mkdir /strongswan-build && \
@@ -20,24 +22,26 @@ RUN \
   cd strongswan-$VERSION && \
   ./configure --prefix=/usr --sysconfdir=/etc --disable-defaults        \
     --enable-charon --enable-ikev2 --enable-nonce --enable-random       \
-    --enable-openssl --enable-pkcs1 --enable-pkcs8 --enable-pkcs12      \
-    --enable-pem --enable-x509 --enable-pubkey --enable-constraints     \
-    --enable-pki --enable-socket-default --enable-kernel-netlink        \
+    --enable-openssl --enable-pem --enable-x509 --enable-pubkey         \
+    --enable-constraints --enable-pki --enable-curl --enable-sqlite     \
+    --enable-socket-default --enable-kernel-netlink --enable-updown     \
     --enable-eap-identity --enable-eap-md5 --enable-eap-ttls            \
-    --enable-eap-tnc --enable-updown --enable-vici --enable-drbg        \
+    --enable-eap-tnc --enable-tnccs-20 --enable-tnc-imc  --enable-vici  \
     --enable-swanctl --enable-resolve --enable-silent-rules             \
-    --enable-tnccs-20 --enable-tnc-imc --enable-sqlite                  \
     --enable-imc-os --enable-imc-swima --enable-imc-scanner          && \
-   make all && make install && \
-   cd / && rm -R strongswan-build && \
-   ln -s /usr/libexec/ipsec/charon charon && mkdir /etc/pts && \
-   cat $TMPL/sw_collector_tables.sql | sqlite3 /etc/pts/collector.db && \ 
-   \
-   # clean up
-   apt-get -y remove $DEV_PACKAGES && \
-   apt-get -y autoremove && \
-   apt-get clean && \
-   rm -rf /var/lib/apt/lists/*
+  make all && make install && \
+  cd / && rm -R strongswan-build && \
+  ln -s /usr/libexec/ipsec/charon charon && mkdir /etc/pts && \
+  cat $TMPL/sw_collector_tables.sql | sqlite3 /etc/pts/collector.db && \
+  \
+  # install swid_generator
+  pip3 install -U swid_generator && \
+  \
+  # clean up
+  apt-get -y remove $DEV_PKGS && \
+  apt-get -y autoremove && \
+  apt-get clean && \
+  rm -rf /var/lib/apt/lists/*
 
 # Expose IKE and NAT-T ports
 EXPOSE 500 4500

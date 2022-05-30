@@ -16,7 +16,7 @@ charon {
    fragment_size = 1500
 
    plugins {
-     eap-ttls {
+      eap-ttls {
          max_message_count = 0
          # enable for certificate-based client authentication
          request_peer_auth = yes
@@ -37,6 +37,15 @@ charon {
 libimcv {
    database = sqlite:///etc/pts/config.db
    policy_script = /usr/libexec/ipsec/imv_policy_manager
+
+   plugins {
+      imv-swima {
+         rest_api {
+            uri = http://admin-user:strongSwan@tnc/api/
+            timeout = 360
+         }
+      }
+   }
 }
 
 libtls {
@@ -44,5 +53,9 @@ libtls {
 }
 
 attest {
+   database = sqlite:///etc/pts/config.db
+}
+
+sec-updater {
    database = sqlite:///etc/pts/config.db
 }

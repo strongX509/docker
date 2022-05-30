@@ -34,6 +34,10 @@ libimcv {
          # no unique /var/lib/dbus/machine-id on client, set manually
          device_id = a488651e36664792b306cf8be72dd630
       }
+      imc-swima {
+         swid_full = yes
+         swid_database = sqlite:///etc/pts/collector.db
+      }
    }
 }
 
@@ -44,4 +48,7 @@ libtls {
 sw-collector {
    database = sqlite:///etc/pts/collector.db
    history = /var/log/apt/history.log
+   rest_api {
+      uri = http://admin-user:strongSwan@tnc/api/
+   }
 }

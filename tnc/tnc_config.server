@@ -1,5 +1,5 @@
 #IMV-Configuration
 
 IMV "OS"			/usr/lib/ipsec/imcvs/imv-os.so
-IMV "Scanner"		/usr/lib/ipsec/imcvs/imv-scanner.so
-# IMV "SWIMA"		/usr/lib/ipsec/imcvs/imv-swima.so
+# IMV "Scanner"		/usr/lib/ipsec/imcvs/imv-scanner.so
+IMV "SWIMA"			/usr/lib/ipsec/imcvs/imv-swima.so

@@ -2,7 +2,7 @@ version: "3"
 
 services:
   vpn-server:
-    image: strongx509/tnc-server:5.9.5
+    image: strongx509/tnc-server:5.9.7dr1
     container_name: tnc-server
     cap_add:
       - NET_ADMIN
@@ -14,13 +14,17 @@ services:
       - ./server:/etc/swanctl
       - ./strongswan.conf.server:/etc/strongswan.conf
       - ./tnc_config.server:/etc/tnc_config
+      - ./000-default.conf:/etc/apache2/sites-available/000-default.conf
+      - ./settings.ini:/etc/strongTNC/settings.ini
+      - ./init_tnc:/usr/local/bin/init_tnc
+      - ./tmp:/tmp
     networks:
       internet:
          ipv4_address: 192.168.0.2
       intranet:
          ipv4_address: 10.1.0.2
   vpn-client:
-    image: strongx509/tnc-client:5.9.5
+    image: strongx509/tnc-client:5.9.7dr1
     container_name: tnc-client
     depends_on:
       - vpn-server
@@ -34,6 +38,7 @@ services:
       - ./client:/etc/swanctl
       - ./strongswan.conf.client:/etc/strongswan.conf
       - ./tnc_config.client:/etc/tnc_config
+      - ./tmp:/tmp
     networks:
       internet:
          ipv4_address: 192.168.0.3

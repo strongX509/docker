@@ -1,6 +1,8 @@
 FROM ubuntu:20.04
 MAINTAINER Andreas Steffen <andreas.steffen@strongswan.org>
-ENV VERSION="5.9.5"
+ENV STRONGSWAN_VERSION="5.9.7dr1"
+ENV STRONGTNC_VERSION="1.0.1"
+ENV STRONGTNC_URL="https://github.com/strongswan/strongTNC/archive/refs/tags/"
 ENV TZ="Europe/Zurich"
 ENV TMPL="/usr/share/strongswan/templates/database/imv"
 
@@ -8,37 +10,54 @@ RUN \
   # set timezone
   ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone && \
   # install packages
-  DEV_PACKAGES="wget make gcc libssl-dev libsqlite3-dev pkg-config libjson-c-dev" && \
+  DEV_PKGS="make gcc libssl-dev libsqlite3-dev pkg-config libjson-c-dev" && \
+  DEV_PKGS="$DEV_PKGS libcurl4-openssl-dev libxml2-dev libxslt1-dev" && \
   apt-get -y update && \
-  apt-get -y install iproute2 iputils-ping nano sqlite3 libjson-c4 $DEV_PACKAGES && \
+  apt-get -y install iproute2 iputils-ping nano sqlite3 libjson-c4 apache2 \
+    libapache2-mod-wsgi-py3 python3 python3-pip libcurl4 wget binutils $DEV_PKGS && \
   \
   # download and build strongSwan IKEv2 daemon
   mkdir /strongswan-build && \
   cd /strongswan-build && \
-  wget https://download.strongswan.org/strongswan-$VERSION.tar.bz2 && \
-  tar xfj strongswan-$VERSION.tar.bz2 && \
-  cd strongswan-$VERSION && \
+  wget https://download.strongswan.org/strongswan-$STRONGSWAN_VERSION.tar.bz2 && \
+  tar xfj strongswan-$STRONGSWAN_VERSION.tar.bz2 && \
+  cd strongswan-$STRONGSWAN_VERSION && \
   ./configure --prefix=/usr --sysconfdir=/etc --disable-defaults        \
     --enable-charon --enable-ikev2 --enable-nonce --enable-random       \
-    --enable-openssl --enable-pkcs1 --enable-pkcs8 --enable-pkcs12      \
-    --enable-pem --enable-x509 --enable-pubkey --enable-constraints     \
-    --enable-pki --enable-socket-default --enable-kernel-netlink        \
+    --enable-openssl --enable-pem --enable-x509 --enable-pubkey         \
+    --enable-constraints --enable-pki --enable-sqlite --enable-curl     \
+    --enable-socket-default --enable-kernel-netlink --enable-updown     \
     --enable-eap-identity --enable-eap-md5 --enable-eap-ttls            \
-    --enable-eap-tnc --enable-updown --enable-vici --enable-drbg        \
+    --enable-eap-tnc --enable-tnccs-20 --enable-tnc-imv --enable-vici   \
     --enable-swanctl --enable-resolve --enable-silent-rules             \
-    --enable-tnccs-20 --enable-tnc-imv --enable-sqlite --enable-imv-os  \
-    --enable-imv-swima --enable-imv-scanner --enable-imv-attestation && \
-   make all && make install && \
-   cd / && rm -R strongswan-build && \
-   ln -s /usr/libexec/ipsec/charon charon && mkdir /etc/pts && \
-   TMPL="/usr/share/strongswan/templates/database/imv" && \
-   cat $TMPL/tables.sql $TMPL/data.sql | sqlite3 /etc/pts/config.db && \ 
-   \
-   # clean up
-   apt-get -y remove $DEV_PACKAGES && \
-   apt-get -y autoremove && \
-   apt-get clean && \
-   rm -rf /var/lib/apt/lists/*
+    --enable-imv-os  --enable-imv-swima --enable-imv-scanner            \
+    --enable-imv-attestation && \
+ make all && make install && \
+ cd / && rm -R strongswan-build && \
+ ln -s /usr/libexec/ipsec/charon charon && mkdir /etc/pts && \
+ TMPL="/usr/share/strongswan/templates/database/imv" && \
+ cat $TMPL/tables.sql $TMPL/data.sql | sqlite3 /etc/pts/config.db && \
+ chgrp -R www-data /etc/pts /etc/pts/config.db && \
+ chmod g+w /etc/pts /etc/pts/config.db && \
+ mkdir /etc/pts/logs && \
+ \
+ # download and build strongTNC
+ cd /var/www && \
+ wget $STRONGTNC_URL/$STRONGTNC_VERSION.tar.gz && \
+ tar xf $STRONGTNC_VERSION.tar.gz && \
+ rm $STRONGTNC_VERSION.tar.gz && mv strongTNC-$STRONGTNC_VERSION tnc && \
+ chgrp -R www-data tnc && chmod g+sw tnc && cd tnc && \
+ pip3 install -r requirements.txt && \
+ mkdir /etc/strongTNC /var/log/apache2/tnc && \
+ \
+ # install swid_generator
+ pip3 install -U swid_generator && \
+ \
+ # clean up
+ apt-get -y remove $DEV_PKGS && \
+ apt-get -y autoremove && \
+ apt-get clean && \
+ rm -rf /var/lib/apt/lists/*
 
-# Expose IKE and NAT-T ports
-EXPOSE 500 4500
+# Expose HTTP, IKE and NAT-T ports
+EXPOSE 80 500 4500
