@@ -1,10 +1,10 @@
-FROM ubuntu:20.04
+FROM ubuntu:22.04
 MAINTAINER Andreas Steffen <andreas.steffen@strongswan.org>
 ENV VERSION="5.9.6"
 
 RUN \
   # install packages
-  DEV_PACKAGES="wget make gcc libssl-dev" && \
+  DEV_PACKAGES="wget bzip2 make gcc libssl-dev" && \
   apt-get -y update && \
   apt-get -y install iproute2 iputils-ping nano $DEV_PACKAGES && \
   \

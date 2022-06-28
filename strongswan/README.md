@@ -40,8 +40,9 @@ In an additional console window we open a `bash` shell to start and manage the s
 ```console
 server$ docker exec -ti vpn-server /bin/bash
 server# ./charon &
-00[DMN] Starting IKE charon daemon (strongSwan 5.9.4, Linux 5.11.0-37-generic, x86_64)
-00[LIB] loaded plugins: charon random nonce x509 constraints pubkey pkcs1 pkcs8 pkcs12 pem openssl drbg kernel-netlink resolve socket-default vici updown eap-identity eap-md5 eap-dynamic eap-tls
+00[DMN] Starting IKE charon daemon (strongSwan 5.9.6, Linux 5.15.0-40-generic, x86_64)
+00[LIB] providers loaded by OpenSSL: legacy default
+00[LIB] loaded plugins: charon random nonce x509 constraints pubkey pem openssl kernel-netlink resolve socket-default vici updown eap-identity eap-md5 eap-dynamic eap-tls
 00[JOB] spawning 16 worker threads
 00[DMN] executing start script 'creds' (swanctl --load-creds)
 15[CFG] loaded certificate 'C=CH, O=Cyber, CN=server.strongswan.org'
@@ -75,8 +76,9 @@ And in a third console window we open a `bash`shell to start and manage the stro
 ```console
 client$ docker exec -ti vpn-client /bin/bash
 client# ./charon &
-00[DMN] Starting IKE charon daemon (strongSwan 5.9.4, Linux 5.11.0-37-generic, x86_64)
-00[LIB] loaded plugins: charon random nonce x509 constraints pubkey pkcs1 pkcs8 pkcs12 pem openssl drbg kernel-netlink resolve socket-default vici updown eap-identity eap-md5 eap-dynamic eap-tls
+00[DMN] Starting IKE charon daemon (strongSwan 5.9.6, Linux 5.15.0-40-generic, x86_64)
+00[LIB] providers loaded by OpenSSL: legacy default
+00[LIB] loaded plugins: charon random nonce x509 constraints pubkey pem openssl kernel-netlink resolve socket-default vici updown eap-identity eap-md5 eap-dynamic eap-tls
 00[JOB] spawning 16 worker threads
 00[DMN] executing start script 'creds' (swanctl --load-creds)
 01[CFG] loaded certificate 'C=CH, O=Cyber, CN=client.strongswan.org'
