@@ -1,11 +1,11 @@
-FROM ubuntu:20.04
+FROM ubuntu:22.04
 MAINTAINER Andreas Steffen <andreas.steffen@strongswan.org>
-ENV VERSION="6.0dr15"
+ENV VERSION="6.0dr16"
 ENV LIBOQS_VERSION="0.7.1"
 
 RUN \
   # install packages
-  DEV_PACKAGES="wget unzip make gcc libssl-dev cmake ninja-build" && \
+  DEV_PACKAGES="wget unzip bzip2 make gcc libssl-dev cmake ninja-build" && \
   apt-get -y update && \
   apt-get -y install iproute2 iputils-ping nano $DEV_PACKAGES && \
   \
@@ -31,8 +31,8 @@ RUN \
     --enable-openssl --enable-pem --enable-x509 --enable-pubkey       \
     --enable-constraints --enable-pki --enable-socket-default         \
     --enable-kernel-netlink --enable-swanctl --enable-resolve         \
-    --enable-frodo --enable-oqs --enable-updown --enable-vici         \
-    --enable-pkcs8 --enable-silent-rules  && \
+    --enable-drbg --enable-frodo --enable-oqs --enable-updown         \
+    --enable-vici --enable-pkcs8 --enable-silent-rules  && \
    make all && make install && \
    cd / && rm -R strongswan-build && \
    ln -s /usr/libexec/ipsec/charon charon && \
