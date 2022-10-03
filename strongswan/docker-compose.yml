@@ -2,7 +2,7 @@ version: "3"
 
 services:
   vpn-server:
-    image: strongx509/strongswan:5.9.7
+    image: strongx509/strongswan:5.9.8
     container_name: vpn-server
     cap_add:
       - NET_ADMIN
@@ -19,7 +19,7 @@ services:
       intranet:
          ipv4_address: 10.1.0.2
   vpn-client:
-    image: strongx509/strongswan:5.9.7
+    image: strongx509/strongswan:5.9.8
     container_name: vpn-client
     depends_on:
       - vpn-server
