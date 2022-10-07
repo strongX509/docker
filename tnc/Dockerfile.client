@@ -1,6 +1,6 @@
-FROM ubuntu:20.04
+FROM ubuntu:22.04
 MAINTAINER Andreas Steffen <andreas.steffen@strongswan.org>
-ENV VERSION="5.9.7dr1"
+ENV VERSION="5.9.8"
 ENV TZ="Europe/Zurich"
 ENV TMPL="/usr/share/strongswan/templates/database/sw-collector"
 
@@ -11,7 +11,7 @@ RUN \
   DEV_PKGS="wget make gcc libssl-dev libsqlite3-dev pkg-config libjson-c-dev" && \
   DEV_PKGS="$DEV_PKGS libcurl4-openssl-dev" && \
   apt-get -y update && \
-  apt-get -y install iproute2 iputils-ping nano sqlite3 libjson-c4 net-tools \
+  apt-get -y install iproute2 iputils-ping nano sqlite3 libjson-c5 net-tools \
     python3 python3-pip libcurl4 $DEV_PKGS && \
   \
   # download and build strongSwan IKEv2 daemon

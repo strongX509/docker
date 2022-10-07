@@ -1,7 +1,7 @@
-FROM ubuntu:20.04
+FROM ubuntu:22.04
 MAINTAINER Andreas Steffen <andreas.steffen@strongswan.org>
-ENV STRONGSWAN_VERSION="5.9.7dr1"
-ENV STRONGTNC_VERSION="1.0.1"
+ENV STRONGSWAN_VERSION="5.9.8"
+ENV STRONGTNC_VERSION="1.0.2"
 ENV STRONGTNC_URL="https://github.com/strongswan/strongTNC/archive/refs/tags/"
 ENV TZ="Europe/Zurich"
 ENV TMPL="/usr/share/strongswan/templates/database/imv"
@@ -13,7 +13,7 @@ RUN \
   DEV_PKGS="make gcc libssl-dev libsqlite3-dev pkg-config libjson-c-dev" && \
   DEV_PKGS="$DEV_PKGS libcurl4-openssl-dev libxml2-dev libxslt1-dev" && \
   apt-get -y update && \
-  apt-get -y install iproute2 iputils-ping nano sqlite3 libjson-c4 apache2 \
+  apt-get -y install iproute2 iputils-ping nano sqlite3 libjson-c5 apache2 \
     libapache2-mod-wsgi-py3 python3 python3-pip libcurl4 wget binutils $DEV_PKGS && \
   \
   # download and build strongSwan IKEv2 daemon

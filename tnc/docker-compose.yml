@@ -2,7 +2,7 @@ version: "3"
 
 services:
   vpn-server:
-    image: strongx509/tnc-server:5.9.7dr1
+    image: strongx509/tnc-server:latest
     container_name: tnc-server
     cap_add:
       - NET_ADMIN
@@ -24,7 +24,7 @@ services:
       intranet:
          ipv4_address: 10.1.0.2
   vpn-client:
-    image: strongx509/tnc-client:5.9.7dr1
+    image: strongx509/tnc-client:latest
     container_name: tnc-client
     depends_on:
       - vpn-server
