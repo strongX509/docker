@@ -51,7 +51,6 @@ server# init_tnc
 Then we start the strongSwan `charon` daemon in the background
 ```console
 server# ./charon &
-# ./charon &
 00[DMN] Starting IKE charon daemon (strongSwan 5.9.8, Linux 5.15.0-48-generic, x86_64)
 00[TNC] TNC recommendation policy is 'default'
 00[TNC] loading IMVs from '/etc/tnc_config'
