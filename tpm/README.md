@@ -83,6 +83,10 @@ sha256:
   23: 0x0000000000000000000000000000000000000000000000000000000000000000
 ```
 
+An extensive TPM 2.0 tutorial using the strongSwan `pki` tool can be found [here][CYBER].
+
+[CYBER]: https://github.com/strongX509/cyber/blob/master/Operating_Systems/Platform_Security.md
+
 Author:  [Andreas Steffen][AS] [CC BY 4.0][CC]
 
 [AS]: mailto:andreas.steffen@strongsec.net

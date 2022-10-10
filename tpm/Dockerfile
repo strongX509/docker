@@ -1,15 +1,15 @@
-FROM ubuntu:20.04
+FROM ubuntu:22.04
 MAINTAINER Andreas Steffen <andreas.steffen@strongswan.org>
-ENV TPM_VERSION="1661"
-ENV TPM_TSS_VERSION="3.1.0"
-ENV TPM_TOOLS_VERSION="5.1.1"
-ENV STRONGSWAN_VERSION="5.9.3"
+ENV TPM_VERSION="1682"
+ENV TPM_TSS_VERSION="3.2.0"
+ENV TPM_TOOLS_VERSION="5.3"
+ENV STRONGSWAN_VERSION="5.9.8"
 ENV TZ=Europe/Zurich
 RUN \
   # set timezone
   ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone && \
   # install packages
-  DEV_PACKAGES="wget make gcc g++ pkg-config libssl-dev libcurl4-openssl-dev libjson-c-dev uuid-dev" && \
+  DEV_PACKAGES="wget bzip2 make gcc g++ pkg-config libssl-dev libcurl4-openssl-dev libjson-c-dev uuid-dev" && \
   apt-get -y update && \
   apt-get -y install nano libcurl4 acl $DEV_PACKAGES && \
   \
