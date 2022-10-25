@@ -1,6 +1,6 @@
 # pq-strongswan
 
-Build and run a [strongSwan][STRONGSWAN] 6.0dr Post-Quantum IKEv2 Daemon in a Docker image. The current prototype implementation is based on the two following IETF documents:
+Build and run a [strongSwan][STRONGSWAN] 6.0beta Post-Quantum IKEv2 Daemon in a Docker image. The current prototype implementation is based on the two following IETF documents:
 
 * [RFC 9242][IKEV2_INTERMEDIATE]: Intermediate Exchange in the IKEv2 Protocol
 * [draft-ietf-ipsecme-ikev2-multiple-ke][IKEV2_MULTIPLE_KE]: Multiple Key Exchanges in IKEv2
@@ -206,9 +206,9 @@ In an additional console window we open a `bash` shell to start and manage the s
 ```console
 moon$ docker exec -ti moon /bin/bash
 moon# ./charon &
-00[DMN] Starting IKE charon daemon (strongSwan 6.0dr17, Linux 5.15.0-48-generic, x86_64)
+00[DMN] Starting IKE charon daemon (strongSwan 6.0beta1, Linux 5.15.0-52-generic, x86_64)
 00[LIB] providers loaded by OpenSSL: legacy default
-00[LIB] loaded plugins: charon random nonce x509 constraints pubkey pem openssl pkcs8 frodo oqs drbg kernel-netlink resolve socket-default vici updown
+00[LIB] loaded plugins: charon random nonce x509 revocation constraints pubkey pkcs1 pkcs7 pgp dnskey sshkey pem openssl pkcs8 xcbc cmac kdf frodo oqs drbg attr kernel-netlink resolve socket-default vici updown
 00[JOB] spawning 16 worker threads
 00[DMN] executing start script 'creds' (swanctl --load-creds)
 14[CFG] loaded certificate 'C=CH, O=Cyber, CN=moon.strongswan.org'
@@ -283,9 +283,9 @@ In a third console window we open a `bash`shell to start and manage the strongSw
 ```console
 carol$ docker exec -ti carol /bin/bash
 carol# ./charon &
-00[DMN] Starting IKE charon daemon (strongSwan 6.0dr17, Linux 5.15.0-48-generic, x86_64)
+00[DMN] Starting IKE charon daemon (strongSwan 6.0beta1, Linux 5.15.0-52-generic, x86_64)
 00[LIB] providers loaded by OpenSSL: legacy default
-00[LIB] loaded plugins: charon random nonce x509 constraints pubkey pem openssl pkcs8 frodo oqs drbg kernel-netlink resolve socket-default vici updown
+00[LIB] loaded plugins: charon random nonce x509 revocation constraints pubkey pkcs1 pkcs7 pgp dnskey sshkey pem openssl pkcs8 xcbc cmac kdf frodo oqs drbg attr kernel-netlink resolve socket-default vici updown
 00[JOB] spawning 16 worker threads
 00[DMN] executing start script 'creds' (swanctl --load-creds)
 15[CFG] loaded certificate 'C=CH, O=Cyber, CN=carol@strongswan.org'

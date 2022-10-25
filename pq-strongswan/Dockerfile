@@ -1,6 +1,6 @@
 FROM ubuntu:22.04
 MAINTAINER Andreas Steffen <andreas.steffen@strongswan.org>
-ENV VERSION="6.0dr18"
+ENV VERSION="6.0beta1"
 ENV LIBOQS_VERSION="0.7.2"
 
 RUN \
@@ -26,22 +26,17 @@ RUN \
   wget https://download.strongswan.org/strongswan-$VERSION.tar.bz2 && \
   tar xfj strongswan-$VERSION.tar.bz2 && \
   cd strongswan-$VERSION && \
-  ./configure --prefix=/usr --sysconfdir=/etc --disable-defaults      \
-    --enable-charon --enable-ikev2 --enable-nonce --enable-random     \
-    --enable-openssl --enable-pem --enable-x509 --enable-pubkey       \
-    --enable-constraints --enable-pki --enable-socket-default         \
-    --enable-kernel-netlink --enable-swanctl --enable-resolve         \
-    --enable-drbg --enable-frodo --enable-oqs --enable-updown         \
-    --enable-vici --enable-pkcs8 --enable-silent-rules  && \
-   make all && make install && \
-   cd / && rm -R strongswan-build && \
-   ln -s /usr/libexec/ipsec/charon charon && \
-   \
-   # clean up
-   apt-get -y remove $DEV_PACKAGES && \
-   apt-get -y autoremove && \
-   apt-get clean && \
-   rm -rf /var/lib/apt/lists/*
+  ./configure --prefix=/usr --sysconfdir=/etc --disable-ikev1       \
+              --enable-frodo --enable-oqs --enable-silent-rules  && \
+  make all && make install && \
+  cd / && rm -R strongswan-build && \
+  ln -s /usr/libexec/ipsec/charon charon && \
+  \
+  # clean up
+  apt-get -y remove $DEV_PACKAGES && \
+  apt-get -y autoremove && \
+  apt-get clean && \
+  rm -rf /var/lib/apt/lists/*
 
 # Expose IKE and NAT-T ports
 EXPOSE 500 4500
