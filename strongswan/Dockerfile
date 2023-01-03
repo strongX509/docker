@@ -1,6 +1,6 @@
 FROM ubuntu:22.04
 MAINTAINER Andreas Steffen <andreas.steffen@strongswan.org>
-ENV VERSION="5.9.8"
+ENV VERSION="5.9.9"
 
 RUN \
   # install packages
