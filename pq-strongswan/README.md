@@ -206,8 +206,9 @@ In an additional console window we open a `bash` shell to start and manage the s
 ```console
 moon$ docker exec -ti moon /bin/bash
 moon# ./charon &
-00[DMN] Starting IKE charon daemon (strongSwan 6.0beta1, Linux 5.15.0-52-generic, x86_64)
+00[DMN] Starting IKE charon daemon (strongSwan 6.0beta2, Linux 5.15.0-57-generic, x86_64)
 00[LIB] providers loaded by OpenSSL: legacy default
+00[CFG] install DNS servers in '/etc/resolv.conf'
 00[LIB] loaded plugins: charon random nonce x509 revocation constraints pubkey pkcs1 pkcs7 pgp dnskey sshkey pem openssl pkcs8 xcbc cmac kdf frodo oqs drbg attr kernel-netlink resolve socket-default vici updown
 00[JOB] spawning 16 worker threads
 00[DMN] executing start script 'creds' (swanctl --load-creds)
@@ -283,8 +284,9 @@ In a third console window we open a `bash`shell to start and manage the strongSw
 ```console
 carol$ docker exec -ti carol /bin/bash
 carol# ./charon &
-00[DMN] Starting IKE charon daemon (strongSwan 6.0beta1, Linux 5.15.0-52-generic, x86_64)
+00[DMN] Starting IKE charon daemon (strongSwan 6.0beta2, Linux 5.15.0-57-generic, x86_64)
 00[LIB] providers loaded by OpenSSL: legacy default
+00[CFG] install DNS servers in '/etc/resolv.conf'
 00[LIB] loaded plugins: charon random nonce x509 revocation constraints pubkey pkcs1 pkcs7 pgp dnskey sshkey pem openssl pkcs8 xcbc cmac kdf frodo oqs drbg attr kernel-netlink resolve socket-default vici updown
 00[JOB] spawning 16 worker threads
 00[DMN] executing start script 'creds' (swanctl --load-creds)
