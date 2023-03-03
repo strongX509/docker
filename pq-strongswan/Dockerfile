@@ -1,6 +1,6 @@
 FROM ubuntu:22.04
 MAINTAINER Andreas Steffen <andreas.steffen@strongswan.org>
-ENV VERSION="6.0beta2"
+ENV VERSION="6.0.0beta3"
 ENV LIBOQS_VERSION="0.7.2"
 
 RUN \
