@@ -3,10 +3,10 @@
 Build and run a [strongSwan][STRONGSWAN] 6.0beta Post-Quantum IKEv2 Daemon in a Docker image. The current prototype implementation is based on the two following IETF documents:
 
 * [RFC 9242][IKEV2_INTERMEDIATE]: Intermediate Exchange in the IKEv2 Protocol
-* [draft-ietf-ipsecme-ikev2-multiple-ke][IKEV2_MULTIPLE_KE]: Multiple Key Exchanges in IKEv2
+* [RFC 9370][IKEV2_MULTIPLE_KE]: Multiple Key Exchanges in IKEv2
 
 [STRONGSWAN]:         https://www.strongswan.org
-[IKEV2_MULTIPLE_KE]:  https://tools.ietf.org/html/draft-ietf-ipsecme-ikev2-multiple-ke
+[IKEV2_MULTIPLE_KE]:  https://tools.ietf.org/html/rfc9370
 [IKEV2_INTERMEDIATE]: https://tools.ietf.org/html/rfc9242
 
 ## Table of Contents
