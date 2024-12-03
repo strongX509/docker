@@ -1,6 +1,6 @@
-FROM ubuntu:22.04
+FROM ubuntu:24.04
 MAINTAINER Andreas Steffen <andreas.steffen@strongswan.org>
-ENV VERSION="5.9.14"
+ENV VERSION="6.0.0"
 
 RUN \
   # install packages
@@ -20,7 +20,7 @@ RUN \
     --enable-constraints --enable-pki --enable-socket-default         \
     --enable-kernel-netlink --enable-swanctl --enable-resolve         \
     --enable-eap-identity --enable-eap-md5 --enable-eap-dynamic       \
-    --enable-eap-tls --enable-updown --enable-vici                    \
+    --enable-eap-tls --enable-updown --enable-vici --enable-ml        \
     --enable-silent-rules  && \
    make all && make install && \
    cd / && rm -R strongswan-build && \

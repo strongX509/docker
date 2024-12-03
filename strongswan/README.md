@@ -40,35 +40,36 @@ In an additional console window we open a `bash` shell to start and manage the s
 ```console
 server$ docker exec -ti vpn-server /bin/bash
 server# ./charon &
-00[DMN] Starting IKE charon daemon (strongSwan 5.9.10, Linux 5.19.0-32-generic, x86_64)
+00[DMN] Starting IKE charon daemon (strongSwan 6.0.0, Linux 6.8.0-49-generic, x86_64)
 00[LIB] providers loaded by OpenSSL: legacy default
-00[LIB] loaded plugins: charon random nonce x509 constraints pubkey pem openssl kernel-netlink resolve socket-default vici updown eap-identity eap-md5 eap-dynamic eap-tls
+00[CFG] install DNS servers in '/etc/resolv.conf'
+00[LIB] loaded plugins: charon random nonce x509 constraints pubkey pem openssl ml kernel-netlink resolve socket-default vici updown eap-identity eap-md5 eap-dynamic eap-tls counters
 00[JOB] spawning 16 worker threads
 00[DMN] executing start script 'creds' (swanctl --load-creds)
-15[CFG] loaded certificate 'C=CH, O=Cyber, CN=server.strongswan.org'
-07[CFG] loaded certificate 'C=CH, O=Cyber, CN=Cyber Root CA'
-12[CFG] loaded ECDSA private key
+07[CFG] loaded certificate 'C=CH, O=Cyber, CN=server.strongswan.org'
+11[CFG] loaded certificate 'C=CH, O=Cyber, CN=Cyber Root CA'
+15[CFG] loaded ECDSA private key
 08[CFG] loaded IKE shared key with id 'ike-jane' for: 'jane@strongswan.org'
-13[CFG] loaded IKE shared key with id 'ike-hacker' for: 'hacker@strongswan.org'
-08[CFG] loaded EAP shared key with id 'eap-jane' for: 'jane'
-11[CFG] loaded EAP shared key with id 'eap-hacker' for: 'hacker'
+12[CFG] loaded IKE shared key with id 'ike-hacker' for: 'hacker@strongswan.org'
+02[CFG] loaded EAP shared key with id 'eap-jane' for: 'jane'
+07[CFG] loaded EAP shared key with id 'eap-hacker' for: 'hacker'
 00[DMN] creds: loaded certificate from '/etc/swanctl/x509/serverCert.pem'
 00[DMN] creds: loaded certificate from '/etc/swanctl/x509ca/caCert.pem'
-00[DMN] creds: loaded ecdsa key from '/etc/swanctl/ecdsa/serverKey.pem'
+00[DMN] creds: loaded ECDSA key from '/etc/swanctl/ecdsa/serverKey.pem'
 00[DMN] creds: loaded ike secret 'ike-jane'
 00[DMN] creds: loaded ike secret 'ike-hacker'
 00[DMN] creds: loaded eap secret 'eap-jane'
 00[DMN] creds: loaded eap secret 'eap-hacker'
 00[DMN] executing start script 'conns' (swanctl --load-conns)
-13[CFG] added vici connection: rw
-16[CFG] added vici connection: psk
-09[CFG] added vici connection: eap
+09[CFG] added vici connection: rw
+14[CFG] added vici connection: psk
+05[CFG] added vici connection: eap
 00[DMN] conns: loaded connection 'rw'
 00[DMN] conns: loaded connection 'psk'
 00[DMN] conns: loaded connection 'eap'
 00[DMN] conns: successfully loaded 3 connections, 0 unloaded
 00[DMN] executing start script 'pools' (swanctl --load-pools)
-07[CFG] added vici pool rw_pool: 10.3.0.0, 254 entries
+15[CFG] added vici pool rw_pool: 10.3.0.1, 254 entries
 00[DMN] pools: loaded pool 'rw_pool'
 00[DMN] pools: successfully loaded 1 pools, 0 unloaded
 ```
@@ -76,32 +77,34 @@ And in a third console window we open a `bash`shell to start and manage the stro
 ```console
 client$ docker exec -ti vpn-client /bin/bash
 client# ./charon &
-00[DMN] Starting IKE charon daemon (strongSwan 5.9.10, Linux 5.19.0-32-generic, x86_64)
+000[DMN] Starting IKE charon daemon (strongSwan 6.0.0, Linux 6.8.0-49-generic, x86_64)
 00[LIB] providers loaded by OpenSSL: legacy default
-00[LIB] loaded plugins: charon random nonce x509 constraints pubkey pem openssl kernel-netlink resolve socket-default vici updown eap-identity eap-md5 eap-dynamic eap-tls
+00[CFG] install DNS servers in '/etc/resolv.conf'
+00[LIB] loaded plugins: charon random nonce x509 constraints pubkey pem openssl ml kernel-netlink resolve socket-default vici updown eap-identity eap-md5 eap-dynamic eap-tls counters
 00[JOB] spawning 16 worker threads
 00[DMN] executing start script 'creds' (swanctl --load-creds)
-01[CFG] loaded certificate 'C=CH, O=Cyber, CN=client.strongswan.org'
-08[CFG] loaded certificate 'C=CH, O=Cyber, CN=Cyber Root CA'
-11[CFG] loaded ECDSA private key
-01[CFG] loaded IKE shared key with id 'ike-hacker' for: 'hacker@strongswan.org'
-07[CFG] loaded EAP shared key with id 'eap-hacker' for: 'hacker'
+07[CFG] loaded certificate 'C=CH, O=Cyber, CN=client.strongswan.org'
+13[CFG] loaded certificate 'C=CH, O=Cyber, CN=Cyber Root CA'
+01[CFG] loaded ECDSA private key
+08[CFG] loaded IKE shared key with id 'ike-hacker' for: 'hacker@strongswan.org'
+12[CFG] loaded EAP shared key with id 'eap-hacker' for: 'hacker'
 00[DMN] creds: loaded certificate from '/etc/swanctl/x509/clientCert.pem'
 00[DMN] creds: loaded certificate from '/etc/swanctl/x509ca/caCert.pem'
-00[DMN] creds: loaded ecdsa key from '/etc/swanctl/ecdsa/clientKey.pem'
+00[DMN] creds: loaded ECDSA key from '/etc/swanctl/ecdsa/clientKey.pem'
 00[DMN] creds: loaded ike secret 'ike-hacker'
 00[DMN] creds: loaded eap secret 'eap-hacker'
 00[DMN] executing start script 'conns' (swanctl --load-conns)
-07[CFG] added vici connection: home
-12[CFG] added vici connection: psk
-05[CFG] added vici connection: eap
+13[CFG] added vici connection: home
+01[CFG] added vici connection: psk
+07[CFG] added vici connection: eap
+12[CFG] added vici connection: eap-tls
 00[DMN] conns: loaded connection 'home'
 00[DMN] conns: loaded connection 'psk'
 00[DMN] conns: loaded connection 'eap'
 00[DMN] conns: loaded connection 'eap-tls'
 00[DMN] conns: successfully loaded 4 connections, 0 unloaded
 00[DMN] executing start script 'pools' (swanctl --load-pools)
-no pools found, 0 unloaded
+00[DMN] pools: no pools found, 0 unloaded
 ```
 The setup defines four VPN configurations `home`, `psk`, `eap` and `eap-tls` based on *X.509 certificates*,  *pre-shared keys*, *EAP MD5* and *EAP TLS*, respectively.
 ```console
