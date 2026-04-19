@@ -1,6 +1,6 @@
 FROM ubuntu:24.04
 MAINTAINER Andreas Steffen <andreas.steffen@strongswan.org>
-ENV VERSION="6.0.0"
+ENV VERSION="6.0.5"
 
 RUN \
   # install packages

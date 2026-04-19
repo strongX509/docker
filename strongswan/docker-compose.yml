@@ -1,5 +1,3 @@
-version: "3"
-
 services:
   vpn-server:
     image: strongx509/strongswan:latest
