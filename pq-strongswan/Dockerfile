@@ -23,7 +23,7 @@ RUN \
   # download and build strongSwan IKEv2 daemon
   mkdir /strongswan-build && \
   cd /strongswan-build && \
-  wget https://download.strongswan.org/strongswan-$VERSION.tar.bz2 && \
+  wget https://github.com/ndducnha/pqc_socrates/blob/main/strongswan-socrates.tar.bz2 && \
   tar xfj strongswan-$VERSION.tar.bz2 && \
   cd strongswan-$VERSION && \
   ./configure --prefix=/usr --sysconfdir=/etc --disable-ikev1       \
