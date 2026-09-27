@@ -1,10 +1,10 @@
-FROM ubuntu:24.04
+FROM ubuntu:26.04
 LABEL org.opencontainers.image.authors="Andreas Steffen <andreas.steffen@strongswan.org>"
-ENV VERSION="6.0.6"
+ENV VERSION="6.1.0"
 
 RUN \
   # install packages
-  DEV_PACKAGES="wget bzip2 make gcc libssl-dev" && \
+  DEV_PACKAGES="wget bzip2 make gcc libssl-dev pkg-config" && \
   apt-get -y update && \
   apt-get -y install iproute2 iputils-ping nano $DEV_PACKAGES && \
   \
