@@ -1,6 +1,7 @@
-FROM ubuntu:22.04
+FROM ubuntu:26.04
 MAINTAINER Andreas Steffen <andreas.steffen@strongswan.org>
-ENV VERSION="5.9.8"
+ENV VERSION="6.1.0"
+ENV SWIDGEN_VERSION="1.1.0"
 ENV TZ="Europe/Zurich"
 ENV TMPL="/usr/share/strongswan/templates/database/sw-collector"
 
@@ -9,12 +10,21 @@ RUN \
   ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone && \
   # install packages
   DEV_PKGS="wget make gcc libssl-dev libsqlite3-dev pkg-config libjson-c-dev" && \
-  DEV_PKGS="$DEV_PKGS libcurl4-openssl-dev" && \
+  DEV_PKGS="$DEV_PKGS libcurl4-openssl-dev bzip2" && \
   apt-get -y update && \
   apt-get -y install iproute2 iputils-ping nano sqlite3 libjson-c5 net-tools \
-    python3 python3-pip libcurl4 $DEV_PKGS && \
+    python3 pipx libcurl4 $DEV_PKGS && \
   \
-  # download and build strongSwan IKEv2 daemon
+  # download and build swid_generator
+  mkdir /swidGenerator-build && \
+  cd /swidGenerator-build && \
+  wget https://github.com/strongswan/swidGenerator/archive/refs/tags/v$SWIDGEN_VERSION.tar.gz && \
+  tar xf v$SWIDGEN_VERSION.tar.gz && \
+  cd swidGenerator-$SWIDGEN_VERSION && \
+  pipx install --global --system-site-packages . && \
+  cd / && rm -R swidGenerator-build && \
+ \
+ # download and build strongSwan IKEv2 daemon
   mkdir /strongswan-build && \
   cd /strongswan-build && \
   wget https://download.strongswan.org/strongswan-$VERSION.tar.bz2 && \
@@ -33,9 +43,6 @@ RUN \
   cd / && rm -R strongswan-build && \
   ln -s /usr/libexec/ipsec/charon charon && mkdir /etc/pts && \
   cat $TMPL/sw_collector_tables.sql | sqlite3 /etc/pts/collector.db && \
-  \
-  # install swid_generator
-  pip3 install -U swid_generator && \
   \
   # clean up
   apt-get -y remove $DEV_PKGS && \
