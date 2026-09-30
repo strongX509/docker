@@ -1,11 +1,11 @@
 FROM ubuntu:22.04
-MAINTAINER Andreas Steffen <andreas.steffen@strongswan.org>
+LABEL maintainer="Andreas Steffen <andreas.steffen@strongswan.org>"
 ENV VERSION="6.0.0beta6"
 ENV LIBOQS_VERSION="0.9.2"
 
 RUN \
   # install packages
-  DEV_PACKAGES="wget unzip bzip2 make gcc libssl-dev cmake ninja-build" && \
+  DEV_PACKAGES="wget unzip bzip2 make gcc libssl-dev cmake ninja-build libtool autoconf automake gettext pkg-config gperf flex bison" && \
   apt-get -y update && \
   apt-get -y install iproute2 iputils-ping nano $DEV_PACKAGES && \
   \
@@ -20,14 +20,14 @@ RUN \
                 -DCMAKE_BUILD_TYPE=Release -DOQS_BUILD_ONLY_LIB=ON .. && \
   ninja && ninja install && \
   cd / && rm -R /liboqs && \
-  # download and build strongSwan IKEv2 daemon
+  # download and build strongSwan IKEv2 daemon using GitHub source
   mkdir /strongswan-build && \
   cd /strongswan-build && \
-  wget https://download.strongswan.org/strongswan-$VERSION.tar.bz2 && \
-  tar xfj strongswan-$VERSION.tar.bz2 && \
-  cd strongswan-$VERSION && \
-  ./configure --prefix=/usr --sysconfdir=/etc --disable-ikev1       \
-              --enable-frodo --enable-oqs --enable-silent-rules  && \
+  wget https://github.com/strongswan/strongswan/archive/refs/tags/$VERSION.tar.gz && \
+  tar xzf $VERSION.tar.gz --strip-components=1 && \
+  autoreconf -i && \
+  ./configure --prefix=/usr --sysconfdir=/etc --disable-ikev1 \
+              --enable-frodo --enable-oqs --enable-silent-rules && \
   make all && make install && \
   cd / && rm -R strongswan-build && \
   ln -s /usr/libexec/ipsec/charon charon && \
